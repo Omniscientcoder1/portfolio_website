@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  longDescription String
+  techStack       String   // JSON-encoded string[]
+  githubLink      String?
+  liveLink        String?
+  imageUrl        String
+  featured        Boolean  @default(false)
+  slug            String   @unique
+  status          String   @default("completed")
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Experience {
+  id               String @id @default(cuid())
+  company          String
+  role             String
+  duration         String
+  startDate        String
+  endDate          String
+  responsibilities String // JSON-encoded string[]
+  achievements     String // JSON-encoded string[]
+  logo             String?
+  order            Int    @default(0)
+}
+
+model Education {
+  id          String @id @default(cuid())
+  degree      String
+  institution String
+  duration    String
+  startDate   String
+  endDate     String
+  description String
+  gpa         String?
+  order       Int    @default(0)
+}
+
+model Certification {
+  id             String  @id @default(cuid())
+  name           String
+  issuer         String
+  date           String
+  credentialLink String?
+  credentialId   String?
+  badgeUrl       String?
+  order          Int     @default(0)
+}
+
+model Testimonial {
+  id       String  @id @default(cuid())
+  name     String
+  role     String
+  company  String
+  content  String
+  imageUrl String?
+  order    Int     @default(0)
+}
+
+model SocialLink {
+  id    String @id @default(cuid())
+  name  String
+  url   String
+  icon  String
+  order Int    @default(0)
+}
+
+model Admin {
+  id           Int    @id @default(autoincrement())
+  username     String @unique
+  passwordHash String
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "degree": "M.Sc in Information Systems Security (MISS)",
+    "institution": "Bangladesh University of Professionals (BUP)",
+    "duration": "Jan 2025 – Present",
+    "startDate": "2025-01",
+    "endDate": "Present",
+    "description": "Professional master's program focused on Penetration Testing, Digital Forensics, and Secure Software Design.",
+    "gpa": "3.5/4.0"
+  },
+  {
+    "id": "2",
+    "degree": "B.Sc in Computer Science and Engineering",
+    "institution": "University of Information Technology and Sciences (UITS)",
+    "duration": "Jan 2020 – Jun 2024",
+    "startDate": "2020-01",
+    "endDate": "2024-06",
+    "description": "Comprehensive study in Data Structures and Algorithms, Database Management Systems, Operating Systems, Computer Networks, Web Application Development, Object-Oriented Programming, and Artificial Intelligence.",
+    "gpa": "3.2/4.0"
+  }
+]

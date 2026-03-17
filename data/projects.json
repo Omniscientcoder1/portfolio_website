@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "title": "Bangladesh Finance SuperApp",
+    "description": "A comprehensive fintech mobile app for Bangladesh Finance PLC. covering loans, deposits, Islamic products, and digital onboarding.",
+    "longDescription": "A full-featured fintech super-application built for Bangladesh Finance PLC., designed to unify banking, investment, and Islamic finance products in one platform. Includes eKYC-powered digital account opening, portfolio management, QR-based payments, and real-time financial analytics. Built with Flutter for cross-platform mobile delivery and a FastAPI backend.",
+    "techStack": ["Flutter", "FastAPI", "Python", "MongoDB", "Node.js", "REST API"],
+    "liveLink": "",
+    "imageUrl": "/images/projects/superapp.jpg",
+    "featured": true,
+    "status": "in-development",
+    "slug": "bangladesh-finance-superapp"
+  },
+  {
+    "id": "2",
+    "title": "Bangladesh Finance Main Website",
+    "description": "The flagship corporate website for Bangladesh Finance PLC. — a licensed non-bank financial institution in Bangladesh.",
+    "longDescription": "Designed and developed the primary corporate website for Bangladesh Finance PLC. Built with Next.js and React for server-side rendering and optimal performance. Integrated MongoDB for dynamic content management and Node.js for RESTful APIs. Features include product showcases, news & media, investor relations, and an online loan inquiry portal.",
+    "techStack": ["Next.js", "React", "Node.js", "MongoDB", "Tailwind CSS", "REST API"],
+    "liveLink": "https://bd.finance",
+    "imageUrl": "/images/projects/bd-finance.jpg",
+    "featured": true,
+    "status": "live",
+    "slug": "bangladesh-finance-main"
+  },
+  {
+    "id": "3",
+    "title": "BD Finance Islamic Wing",
+    "description": "Shariah-compliant financial products portal for the Islamic division of Bangladesh Finance PLC.",
+    "longDescription": "A dedicated web platform for Bangladesh Finance PLC.'s Islamic finance division, offering halal savings, fixed deposits, and Ijarah products. Built as a micro-frontend with shared design tokens from the main site, featuring an Islamic finance calculator, product comparison tools, and a branch locator.",
+    "techStack": ["Next.js", "React", "Node.js", "MongoDB", "Tailwind CSS"],
+    "liveLink": "https://islamic.bd.finance",
+    "imageUrl": "/images/projects/bd-finance-islamic.jpg",
+    "featured": true,
+    "status": "live",
+    "slug": "bangladesh-finance-islamic"
+  },
+  {
+    "id": "4",
+    "title": "BD Finance Securities",
+    "description": "Online trading and securities brokerage platform for Bangladesh Finance & Security Ltd.",
+    "longDescription": "Full-stack web platform for Bangladesh Finance Securities Ltd. (BFSL), allowing investors to manage stock portfolios, track market data, and execute trades. Features real-time feed integration, client account management, trade settlement tracking, and regulatory reporting dashboards.",
+    "techStack": ["Next.js", "React", "Node.js", "MongoDB", "TypeScript", "REST API"],
+    "liveLink": "https://bfsl.bd.finance",
+    "imageUrl": "/images/projects/bd-finance-securities.jpg",
+    "featured": true,
+    "status": "live",
+    "slug": "bangladesh-finance-securities"
+  },
+  {
+    "id": "5",
+    "title": "BD Finance Capital",
+    "description": "Corporate investment and capital management portal for Bangladesh Finance Capital Ltd.",
+    "longDescription": "Built the corporate web presence for Bangladesh Finance Capital Ltd. (BFCL), offering merchant banking, portfolio management, and underwriting services. Includes a secure client portal, financial reports section, fund performance dashboards, and online investment application flows.",
+    "techStack": ["Next.js", "React", "Node.js", "MongoDB", "TypeScript"],
+    "liveLink": "https://bfcl.bd.finance",
+    "imageUrl": "/images/projects/bd-finance-capital.jpg",
+    "featured": false,
+    "status": "live",
+    "slug": "bangladesh-finance-capital"
+  }
+]

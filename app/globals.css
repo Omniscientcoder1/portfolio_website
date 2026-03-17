@@ -1,26 +1,248 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  
+  /* Enhanced Blue Palette */
+  --apple-blue: 210 100% 55%;
+  --apple-blue-dark: 215 80% 50%;
+  --blue-vibrant: 215 100% 60%;
+  --blue-light: 200 100% 70%;
+  --purple-accent: 260 80% 65%;
+  
+  /* Light mode colors - Blue tinted */
+  --background: 210 30% 98%;
+  --foreground: 220 20% 15%;
+  --card: 210 40% 98%;
+  --card-foreground: 220 20% 15%;
+  --popover: 210 40% 98%;
+  --popover-foreground: 220 20% 15%;
+  --primary: var(--apple-blue);
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 95%;
+  --secondary-foreground: 220 20% 15%;
+  --muted: 210 35% 94%;
+  --muted-foreground: 220 15% 45%;
+  --accent: var(--blue-vibrant);
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --border: 210 30% 88%;
+  --input: 210 30% 88%;
+  --ring: var(--apple-blue);
+  
+  /* Enhanced Glassmorphism with Blue Tint */
+  --glass-bg: rgba(200, 220, 255, 0.15);
+  --glass-border: rgba(200, 220, 255, 0.3);
+  --glass-shadow: rgba(100, 150, 255, 0.15);
+  
+  --chart-1: 142 76% 36%;
+  --chart-2: 197 37% 24%;
+  --chart-3: 43 74% 66%;
+  --chart-4: 27 87% 67%;
+  --chart-5: 0 0% 50%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 10%;
+  --sidebar-primary: var(--apple-blue);
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 96%;
+  --sidebar-accent-foreground: 0 0% 10%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-ring: var(--apple-blue);
+}
+
+.dark {
+  --background: 220 35% 8%;
+  --foreground: 210 30% 98%;
+  --card: 220 40% 10%;
+  --card-foreground: 210 30% 98%;
+  --popover: 220 40% 10%;
+  --popover-foreground: 210 30% 98%;
+  --primary: var(--blue-vibrant);
+  --primary-foreground: 220 20% 10%;
+  --secondary: 220 30% 14%;
+  --secondary-foreground: 210 30% 98%;
+  --muted: 220 25% 16%;
+  --muted-foreground: 210 20% 65%;
+  --accent: var(--blue-light);
+  --accent-foreground: 220 20% 10%;
+  --destructive: 0 62% 50%;
+  --border: 220 30% 22%;
+  --input: 220 30% 22%;
+  --ring: var(--blue-vibrant);
+  
+  /* Enhanced Glassmorphism with Blue Tint - Dark Mode */
+  --glass-bg: rgba(30, 60, 120, 0.25);
+  --glass-border: rgba(100, 150, 255, 0.2);
+  --glass-shadow: rgba(0, 50, 150, 0.4);
+  
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --sidebar: 0 0% 12%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: var(--apple-blue-dark);
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 0 0% 15%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 0 0% 20%;
+  --sidebar-ring: var(--apple-blue-dark);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+    background: linear-gradient(135deg,
+      hsl(210, 40%, 96%) 0%,
+      hsl(210, 60%, 90%) 50%,
+      hsl(220, 50%, 92%) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  .dark body {
+    background: linear-gradient(135deg,
+      hsl(220, 40%, 8%) 0%,
+      hsl(215, 45%, 12%) 50%,
+      hsl(210, 35%, 15%) 100%);
+    background-attachment: fixed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Enhanced Glassmorphism with Blue Tint */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 var(--glass-shadow);
+  }
+
+  .glass-strong {
+    background: rgba(200, 220, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    border: 1px solid rgba(200, 220, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(100, 150, 255, 0.2);
+  }
+
+  .dark .glass-strong {
+    background: rgba(30, 60, 120, 0.35);
+    border: 1px solid rgba(100, 150, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 50, 150, 0.5);
+  }
+
+  /* Blue-tinted card effect */
+  .glass-card {
+    background: rgba(220, 235, 255, 0.3);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(200, 220, 255, 0.5);
+    box-shadow: 0 12px 40px 0 rgba(100, 150, 255, 0.25);
+  }
+
+  .dark .glass-card {
+    background: rgba(30, 60, 120, 0.4);
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    box-shadow: 0 12px 40px 0 rgba(0, 50, 150, 0.6);
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Gradient animation */
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+
+  /* 3D / perspective utilities */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .perspective-800 {
+    perspective: 800px;
+  }
+
+  .perspective-1200 {
+    perspective: 1200px;
+  }
+
+  /* Shimmer loading effect */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Floating animation for decorative elements */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float 9s ease-in-out infinite;
+  }
 }

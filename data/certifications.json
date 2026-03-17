@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "name": "Programming for Everybody (Getting Started with Python)",
+    "issuer": "Coursera",
+    "date": "2023-01",
+    "credentialLink": "https://www.coursera.org/",
+    "credentialId": "",
+    "badgeUrl": "/images/certifications/coursera.png"
+  },
+  {
+    "id": "2",
+    "name": "Python Data Structures",
+    "issuer": "Coursera",
+    "date": "2023-03",
+    "credentialLink": "https://www.coursera.org/",
+    "credentialId": "",
+    "badgeUrl": "/images/certifications/coursera.png"
+  },
+  {
+    "id": "3",
+    "name": "A Complete Guide to the Flutter SDK & Framework for Native iOS and Android Apps",
+    "issuer": "Udemy",
+    "date": "2024-01",
+    "credentialLink": "https://www.udemy.com/",
+    "credentialId": "In Progress",
+    "badgeUrl": "/images/certifications/udemy.png"
+  }
+]

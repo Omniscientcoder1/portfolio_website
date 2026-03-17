@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "name": "Sarah Johnson",
+    "role": "Engineering Manager",
+    "company": "Tech Innovations Inc.",
+    "content": "Outstanding developer with exceptional problem-solving skills. They consistently deliver high-quality code and are always willing to help team members. Their expertise in full-stack development has been invaluable to our projects.",
+    "imageUrl": "/images/testimonials/sarah-johnson.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Michael Chen",
+    "role": "Senior Product Manager",
+    "company": "Digital Solutions LLC",
+    "content": "One of the most talented developers I've worked with. They have a unique ability to understand complex business requirements and translate them into elegant technical solutions. A true team player who elevates everyone around them.",
+    "imageUrl": "/images/testimonials/michael-chen.jpg"
+  },
+  {
+    "id": "3",
+    "name": "Emily Rodriguez",
+    "role": "CTO",
+    "company": "StartUp Ventures",
+    "content": "Impressive technical skills combined with excellent communication abilities. They were instrumental in scaling our platform and mentoring junior developers. Their contributions significantly impacted our company's growth.",
+    "imageUrl": "/images/testimonials/emily-rodriguez.jpg"
+  },
+  {
+    "id": "4",
+    "name": "David Kim",
+    "role": "Lead Developer",
+    "company": "Tech Innovations Inc.",
+    "content": "A brilliant developer who brings innovative solutions to challenging problems. Their code is clean, well-documented, and maintainable. It's been a pleasure collaborating on various projects together.",
+    "imageUrl": "/images/testimonials/david-kim.jpg"
+  }
+]

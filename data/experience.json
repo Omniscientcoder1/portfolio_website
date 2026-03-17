@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1",
+    "company": "Bangladesh Finance PLC.",
+    "role": "Software Developer (Officer Grade-1)",
+    "duration": "Sep 2024 – Present",
+    "startDate": "2024-09",
+    "endDate": "Present",
+    "responsibilities": [
+      "Designed, developed & maintained 4 full-scale web platforms (Main, Islamic, Securities, and Capital websites) using Next.js, React.js, MongoDB and Node.js",
+      "Spearheaded development of the Bangladesh Finance Mobile eKYC App, reducing manual verification time by 60%",
+      "Integrated secure RESTful APIs, ensuring compliance with financial-grade security standards",
+      "Built a QR code–based File Archiving System, automating document retrieval and reducing file access time by 70%",
+      "Collaborated with UI/UX teams to ensure responsive, user-friendly, and secure digital platforms"
+    ],
+    "achievements": [
+      "Built and deployed 4 production-grade corporate websites for a leading financial institution within 6 months",
+      "Reduced manual verification time by 60% through the eKYC app",
+      "Reduced file access time by 70% with a QR code–based archiving system",
+      "Selected as top-performing intern and promoted to Officer Grade-1 within 3 months"
+    ],
+    "logo": "/images/companies/bangladesh-finance.png"
+  },
+  {
+    "id": "2",
+    "company": "Bangladesh Finance PLC.",
+    "role": "Software Developer Intern",
+    "duration": "Jun 2024 – Aug 2024",
+    "startDate": "2024-06",
+    "endDate": "2024-08",
+    "responsibilities": [
+      "Assisted in developing and maintaining internal company software using React.js, PHP, and MySQL",
+      "Enhanced system performance by optimizing frontend components, improving load times by up to 25%",
+      "Maintained internal systems using PHP, MySQL, and React.js, following MVC architecture and secure REST API integration",
+      "Worked with senior developers to debug and test mission-critical features",
+      "Gained practical experience in web security, database optimization, API integration, and Agile development"
+    ],
+    "achievements": [
+      "Improved frontend load times by up to 25% through component optimization",
+      "Contributed to multiple live production systems in a fast-paced fintech environment",
+      "Promoted to full-time Software Developer (Officer Grade-1) after 3 months"
+    ],
+    "logo": "/images/companies/bangladesh-finance.png"
+  }
+]

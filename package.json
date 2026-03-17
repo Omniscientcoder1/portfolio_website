@@ -12,9 +12,6 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/mdx": "^3.1.1",

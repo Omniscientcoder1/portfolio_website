@@ -3,8 +3,9 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { FaGithub, FaLinkedin, FaDownload } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaYoutube, FaInstagram, FaFacebook, FaExternalLinkAlt, FaDownload } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import type { SocialLink } from "@/types";
 
 const TECH_BADGES = [
   { label: "React.js",    pos: "top-28 left-[6%]" },
@@ -15,7 +16,17 @@ const TECH_BADGES = [
   { label: "Docker",      pos: "bottom-40 left-[15%]" },
 ];
 
-export function HeroSection() {
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaEnvelope,
+  FaYoutube,
+  FaInstagram,
+  FaFacebook,
+};
+
+export function HeroSection({ socialLinks }: { socialLinks: SocialLink[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -185,23 +196,23 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.75 }}
           className="flex gap-4 justify-center"
         >
-          {[
-            { href: "https://github.com/Omniscientcoder1", Icon: FaGithub, label: "GitHub" },
-            { href: "https://www.linkedin.com/in/tahmid-rahman9098/", Icon: FaLinkedin, label: "LinkedIn" },
-          ].map(({ href, Icon, label }) => (
-            <motion.a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              whileHover={{ scale: 1.15, y: -4 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-3 rounded-xl glass-strong shadow-md hover:shadow-blue-500/40 transition-shadow duration-300"
-            >
-              <Icon className="w-6 h-6 text-blue-400" />
-            </motion.a>
-          ))}
+          {socialLinks.map((social) => {
+            const Icon = iconMap[social.icon] ?? FaExternalLinkAlt;
+            return (
+              <motion.a
+                key={social.id}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.name}
+                whileHover={{ scale: 1.15, y: -4 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-3 rounded-xl glass-strong shadow-md hover:shadow-blue-500/40 transition-shadow duration-300"
+              >
+                <Icon className="w-6 h-6 text-blue-400" />
+              </motion.a>
+            );
+          })}
         </motion.div>
       </motion.div>
 

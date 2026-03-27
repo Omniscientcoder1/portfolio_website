@@ -35,7 +35,7 @@ export function Header() {
       transition={{ duration: 0.5 }}
       className="fixed top-0 left-0 right-0 z-50 px-4 py-4"
     >
-      <nav className="glass-strong rounded-2xl shadow-2xl shadow-blue-500/20 max-w-7xl mx-auto px-6 py-4 border border-blue-400/20">
+      <nav className="glass-solid-nav rounded-2xl shadow-2xl shadow-blue-500/20 max-w-7xl mx-auto px-6 py-4 border border-blue-400/20">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text">

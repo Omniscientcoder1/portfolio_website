@@ -1,21 +1,23 @@
-import { Suspense } from "react";
-import { getGitHubRepos, getFeaturedRepos } from "@/lib/github";
+import { prisma } from "@/lib/prisma";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
+import type { Project } from "@/types";
 
-export const revalidate = 3600;
+type ProjectRow = Awaited<ReturnType<typeof prisma.project.findMany>>[number];
+
+export const revalidate = 60;
 
 export default async function ProjectsPage() {
-  let repos: import("@/types").GitHubRepo[] = [];
-  let error: string | null = null;
+  const raw = await prisma.project.findMany({ orderBy: { order: "asc" } });
+  const projects: Project[] = raw.map((p: ProjectRow) => ({
+    ...p,
+    techStack: JSON.parse(p.techStack) as string[],
+    githubLink: p.githubLink ?? undefined,
+    liveLink: p.liveLink ?? undefined,
+    status: (p.status as Project["status"]) ?? "completed",
+  }));
 
-  try {
-    repos = await getGitHubRepos();
-  } catch (e) {
-    error = "Could not load repositories. Please try again later.";
-  }
-
-  const featuredRepos = getFeaturedRepos(repos);
-  const otherRepos = repos.filter((r) => !featuredRepos.find((f) => f.id === r.id));
+  const featuredProjects = projects.filter((p) => p.featured);
+  const otherProjects = projects.filter((p) => !p.featured);
 
   return (
     <div className="min-h-screen px-6 py-20">
@@ -25,7 +27,7 @@ export default async function ProjectsPage() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-blue-400/30 text-blue-400 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Live from GitHub
+            Managed from Admin Panel
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
             My{" "}
@@ -34,19 +36,11 @@ export default async function ProjectsPage() {
             </span>
           </h1>
           <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
-            Open-source work and personal projects — pulled live from GitHub
+            Projects and case studies curated directly from the admin dashboard
           </p>
         </div>
 
-        {error ? (
-          <div className="text-center py-20">
-            <div className="glass-card rounded-2xl p-12 max-w-md mx-auto">
-              <p className="text-foreground/60 text-lg">{error}</p>
-            </div>
-          </div>
-        ) : (
-          <ProjectsGrid featuredRepos={featuredRepos} otherRepos={otherRepos} />
-        )}
+        <ProjectsGrid featuredProjects={featuredProjects} otherProjects={otherProjects} />
       </div>
     </div>
   );

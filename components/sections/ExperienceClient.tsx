@@ -21,15 +21,37 @@ export function ExperienceClient({ experiences }: { experiences: Experience[] })
         </motion.div>
 
         <div className="relative">
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/30 hidden md:block"></div>
+          {/* Animated SVG timeline line */}
+          <svg
+            className="absolute left-0 md:left-1/2 top-0 h-full hidden md:block overflow-visible"
+            width="2"
+            style={{ transform: "translateX(-1px)" }}
+            preserveAspectRatio="none"
+          >
+            <motion.line
+              x1="1"
+              y1="0"
+              x2="1"
+              y2="100%"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-blue-400/40"
+              pathLength="1"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
+            />
+          </svg>
 
           <div className="space-y-12">
             {experiences.map((exp, index) => (
               <motion.div
                 key={exp.id}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
                 className={`flex flex-col md:flex-row gap-8 items-center ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
@@ -42,7 +64,7 @@ export function ExperienceClient({ experiences }: { experiences: Experience[] })
                           <CardTitle className="text-2xl">{exp.role}</CardTitle>
                           <p className="text-primary font-semibold mt-1 text-lg">{exp.company}</p>
                         </div>
-                        <span className="text-sm text-foreground/60 bg-secondary px-3 py-1 rounded-full">
+                        <span className="text-sm text-foreground/60 bg-secondary px-3 py-1 rounded-full shrink-0">
                           {exp.duration}
                         </span>
                       </div>
@@ -54,7 +76,7 @@ export function ExperienceClient({ experiences }: { experiences: Experience[] })
                           <ul className="space-y-1">
                             {exp.responsibilities.map((resp, i) => (
                               <li key={i} className="text-foreground/70 flex items-start">
-                                <span className="text-primary mr-2">•</span>
+                                <span className="text-primary mr-2 mt-0.5">•</span>
                                 {resp}
                               </li>
                             ))}
@@ -65,7 +87,7 @@ export function ExperienceClient({ experiences }: { experiences: Experience[] })
                           <ul className="space-y-1">
                             {exp.achievements.map((achievement, i) => (
                               <li key={i} className="text-foreground/70 flex items-start">
-                                <span className="text-primary mr-2">★</span>
+                                <span className="text-primary mr-2 mt-0.5">★</span>
                                 {achievement}
                               </li>
                             ))}
@@ -76,11 +98,19 @@ export function ExperienceClient({ experiences }: { experiences: Experience[] })
                   </Card>
                 </div>
 
-                <div className="hidden md:block">
-                  <div className="w-6 h-6 rounded-full bg-primary border-4 border-background shadow-lg"></div>
+                {/* Pulsing timeline dot */}
+                <div className="hidden md:flex items-center justify-center z-10">
+                  <div className="relative w-7 h-7">
+                    <motion.div
+                      animate={{ scale: [1, 1.9, 1], opacity: [0.45, 0, 0.45] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: index * 0.4 }}
+                      className="absolute inset-0 rounded-full bg-blue-400/40"
+                    />
+                    <div className="relative w-7 h-7 rounded-full bg-blue-500 border-4 border-background shadow-lg shadow-blue-500/40 z-10" />
+                  </div>
                 </div>
 
-                <div className="flex-1 hidden md:block"></div>
+                <div className="flex-1 hidden md:block" />
               </motion.div>
             ))}
           </div>

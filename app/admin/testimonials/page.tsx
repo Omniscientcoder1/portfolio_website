@@ -26,6 +26,7 @@ export default function TestimonialsAdminPage() {
   const [editing, setEditing] = useState<Testimonial | null>(null);
   const [form, setForm] = useState<Omit<Testimonial, "id">>(empty);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const load = () => {
     setLoading(true);
@@ -37,11 +38,16 @@ export default function TestimonialsAdminPage() {
 
   useEffect(() => { load(); }, []);
 
-  const openNew = () => { setEditing({ id: "" } as Testimonial); setForm(empty); };
-  const openEdit = (item: Testimonial) => { setEditing(item); setForm({ ...item }); };
+  const openNew = () => { setEditing({ id: "" } as Testimonial); setForm(empty); setSaveError(""); };
+  const openEdit = (item: Testimonial) => { setEditing(item); setForm({ ...item }); setSaveError(""); };
 
   const handleSave = async () => {
+    if (!form.name.trim() || !form.role.trim() || !form.content.trim()) {
+      setSaveError("Name, Role, and Content are required.");
+      return;
+    }
     setSaving(true);
+    setSaveError("");
     const isNew = !editing?.id;
     const url = isNew ? "/api/admin/testimonials" : `/api/admin/testimonials/${editing?.id}`;
     try {
@@ -50,8 +56,18 @@ export default function TestimonialsAdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (res.ok) { load(); setEditing(null); }
-    } finally { setSaving(false); }
+      if (res.ok) {
+        load();
+        setEditing(null);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSaveError(data?.error ?? `Request failed (${res.status})`);
+      }
+    } catch {
+      setSaveError("Network error — please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (item: Testimonial) => {
@@ -102,6 +118,9 @@ export default function TestimonialsAdminPage() {
               <F label="Content *"><Textarea rows={4} value={form.content} onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))} /></F>
               <F label="Photo URL"><Input value={form.imageUrl ?? ""} onChange={(e) => setForm((p) => ({ ...p, imageUrl: e.target.value }))} placeholder="/images/testimonials/..." /></F>
               <F label="Order"><Input type="number" value={form.order} onChange={(e) => setForm((p) => ({ ...p, order: parseInt(e.target.value) || 0 }))} /></F>
+              {saveError && (
+                <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{saveError}</p>
+              )}
               <div className="flex gap-3 pt-2">
                 <Button onClick={handleSave} disabled={saving} className="flex-1">
                   {saving ? <><FaSpinner className="animate-spin mr-2" />Saving…</> : "Save"}

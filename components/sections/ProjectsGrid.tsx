@@ -142,7 +142,16 @@ export function ProjectsGrid({ featuredProjects, otherProjects }: ProjectsGridPr
   );
 }
 
+const GRADIENT_PLACEHOLDERS = [
+  "from-blue-600/50 via-cyan-500/30 to-blue-400/20",
+  "from-purple-600/50 via-blue-500/30 to-cyan-400/20",
+  "from-emerald-600/40 via-cyan-500/30 to-blue-500/20",
+  "from-orange-500/40 via-blue-500/30 to-cyan-500/20",
+];
+
 function ProjectCard({ project, index, featured = false }: { project: Project; index: number; featured?: boolean }) {
+  const gradientIndex = project.title.charCodeAt(0) % GRADIENT_PLACEHOLDERS.length;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, rotateX: -10 }}
@@ -154,27 +163,51 @@ function ProjectCard({ project, index, featured = false }: { project: Project; i
     >
       <TiltCard intensity={6} className="h-full">
         <div
-          className={`group h-full flex flex-col rounded-2xl glass-card border transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/25 ${
+          className={`group h-full flex flex-col rounded-2xl glass-card border transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/25 overflow-hidden ${
             featured ? "ring-2 ring-blue-400/40" : ""
           }`}
         >
-          <div className="p-6 flex-1">
-            <div className="flex items-start justify-between gap-3 mb-3">
-              <h3 className="font-bold text-lg text-foreground group-hover:text-blue-400 transition-colors line-clamp-1">
-                {project.title}
-              </h3>
-              {featured && (
-                <span className="shrink-0 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-yellow-400/20 to-amber-400/20 text-amber-400 border border-amber-400/30">
-                  Featured
-                </span>
-              )}
+          {/* Image / gradient header zone */}
+          <div className="relative h-36 overflow-hidden flex-shrink-0">
+            {project.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className={`absolute inset-0 bg-gradient-to-br ${GRADIENT_PLACEHOLDERS[gradientIndex]}`} />
+            )}
+            {/* Description hover overlay */}
+            <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+              <p className="text-white text-xs text-center leading-relaxed line-clamp-4">
+                {project.description}
+              </p>
             </div>
+            {/* Status badge */}
+            {project.status && project.status !== "completed" && (
+              <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/80 text-white backdrop-blur-sm">
+                {project.status === "live" ? "Live" : "In Dev"}
+              </div>
+            )}
+            {featured && (
+              <div className="absolute top-2 right-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-yellow-400/80 to-amber-400/80 text-amber-900 backdrop-blur-sm">
+                Featured
+              </div>
+            )}
+          </div>
 
-            <p className="text-foreground/60 text-sm leading-relaxed line-clamp-3 mb-4 min-h-[3.75rem]">
+          <div className="p-5 flex-1 flex flex-col">
+            <h3 className="font-bold text-lg text-foreground group-hover:text-blue-400 transition-colors line-clamp-1 mb-2">
+              {project.title}
+            </h3>
+
+            <p className="text-foreground/60 text-sm leading-relaxed line-clamp-2 mb-3 flex-1">
               {project.description}
             </p>
 
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 mb-0">
               {project.techStack.slice(0, 5).map((tech) => (
                 <span
                   key={tech}
@@ -186,7 +219,7 @@ function ProjectCard({ project, index, featured = false }: { project: Project; i
             </div>
           </div>
 
-          <div className="px-6 pb-6 border-t border-blue-400/10 pt-4 mt-auto flex items-center justify-between">
+          <div className="px-5 pb-5 border-t border-blue-400/10 pt-4 mt-auto flex items-center justify-between">
             <Link
               href={`/projects/${project.slug}`}
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors"

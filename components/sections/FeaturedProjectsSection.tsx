@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { TiltCard } from "@/components/ui/TiltCard";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
 import { Project } from "@/types";
 
 interface FeaturedProjectsSectionProps {
@@ -23,19 +24,21 @@ export function FeaturedProjectsSection({ projects }: FeaturedProjectsSectionPro
       <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30, rotateX: -15 }}
-          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, type: "spring", stiffness: 80 }}
-          style={{ transformStyle: "preserve-3d", perspective: "800px" }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
-          <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
+        <div className="text-center mb-16">
+          <AnimatedHeading
+            text="Featured Projects"
+            className="text-4xl md:text-5xl font-bold mb-4"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-xl text-foreground/60 max-w-2xl mx-auto"
+          >
             A selection of projects curated directly from the admin panel
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         <motion.div
           variants={containerVariants}

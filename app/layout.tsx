@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,10 +40,11 @@ export default function RootLayout({
         </div>
         
         <Providers>
+          <CustomCursor />
           <div className="relative z-10">
             <Header />
             <main className="min-h-screen pt-24">
-              {children}
+              <PageTransition>{children}</PageTransition>
             </main>
             <Footer />
           </div>

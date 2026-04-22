@@ -294,4 +294,17 @@
   .animate-float-slow {
     animation: float 9s ease-in-out infinite;
   }
+
+  /* Hide native cursor when custom cursor is active */
+  body.custom-cursor-active,
+  body.custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient { animation: none !important; background-position: 0% 50%; }
+  .animate-float { animation: none !important; }
+  .animate-float-slow { animation: none !important; }
+  .animate-ping { animation: none !important; opacity: 1; }
 }

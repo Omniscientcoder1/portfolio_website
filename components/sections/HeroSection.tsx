@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaYoutube, FaInstagram, FaFacebook, FaExternalLinkAlt, FaDownload } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 import type { SocialLink } from "@/types";
 
 const TECH_BADGES = [
@@ -14,6 +15,26 @@ const TECH_BADGES = [
   { label: "Node.js",     pos: "bottom-1/4 right-[6%]" },
   { label: "MongoDB",     pos: "top-20 right-[18%]" },
   { label: "Docker",      pos: "bottom-40 left-[15%]" },
+];
+
+const SUBTITLE_WORDS = [
+  { text: "Software", className: "" },
+  { text: "Engineer", className: "" },
+  { text: "specializing", className: "" },
+  { text: "in", className: "" },
+  { text: "full-stack", className: "" },
+  { text: "development", className: "" },
+  { text: "with", className: "" },
+  { text: "React,", className: "text-blue-400 font-medium" },
+  { text: "Next.js", className: "text-cyan-400 font-medium" },
+  { text: "&", className: "" },
+  { text: "Node.js", className: "text-blue-400 font-medium" },
+  { text: "—", className: "" },
+  { text: "building", className: "" },
+  { text: "secure,", className: "" },
+  { text: "high-performance", className: "" },
+  { text: "web", className: "" },
+  { text: "applications", className: "" },
 ];
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -34,7 +55,6 @@ export function HeroSection({ socialLinks }: { socialLinks: SocialLink[] }) {
   const sx = useSpring(mx, { stiffness: 40, damping: 18 });
   const sy = useSpring(my, { stiffness: 40, damping: 18 });
 
-  // Three parallax depth layers
   const x1 = useTransform(sx, [0, 1], [-28, 28]);
   const y1 = useTransform(sy, [0, 1], [-14, 14]);
   const x2 = useTransform(sx, [0, 1], [-14, 14]);
@@ -120,11 +140,25 @@ export function HeroSection({ socialLinks }: { socialLinks: SocialLink[] }) {
         </motion.div>
       ))}
 
-      {/* Main content (mid parallax layer) */}
+      {/* Main content */}
       <motion.div
         style={{ x: x2, y: y2 }}
         className="max-w-4xl mx-auto w-full text-center relative z-10"
       >
+        {/* Available for work badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-strong border border-green-400/30 text-green-400 text-sm font-medium mb-6"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+          </span>
+          Available for opportunities
+        </motion.div>
+
         {/* Name heading */}
         <div className="mb-6">
           <motion.p
@@ -148,45 +182,56 @@ export function HeroSection({ socialLinks }: { socialLinks: SocialLink[] }) {
           </motion.h1>
         </div>
 
-        {/* Subtitle */}
+        {/* Word-stagger subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
+          initial="hidden"
+          animate="visible"
+          variants={{ visible: { transition: { staggerChildren: 0.05, delayChildren: 0.45 } } }}
           className="text-lg md:text-xl text-foreground/60 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
-          Software Engineer specializing in full-stack development with{" "}
-          <span className="text-blue-400 font-medium">React</span>,{" "}
-          <span className="text-cyan-400 font-medium">Next.js</span> &amp;{" "}
-          <span className="text-blue-400 font-medium">Node.js</span> — building
-          secure, high-performance web applications
+          {SUBTITLE_WORDS.map((word, i) => (
+            <motion.span
+              key={i}
+              variants={{
+                hidden: { opacity: 0, y: 10 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+              }}
+              className={`inline-block mr-[0.3em] ${word.className}`}
+            >
+              {word.text}
+            </motion.span>
+          ))}
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons with magnetic effect */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="flex flex-wrap gap-4 justify-center mb-12"
         >
-          <Link href="/contact">
-            <Button
-              size="lg"
-              className="shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300"
-            >
-              Get In Touch
-            </Button>
-          </Link>
-          <a href="/images/Tahmidur_Rahman_Resume_FieldNation.pdf" download>
-            <Button
-              size="lg"
-              variant="outline"
-              className="hover:-translate-y-1 transition-all duration-300"
-            >
-              <FaDownload className="mr-2" />
-              Download CV
-            </Button>
-          </a>
+          <MagneticButton>
+            <Link href="/contact">
+              <Button
+                size="lg"
+                className="shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300"
+              >
+                Get In Touch
+              </Button>
+            </Link>
+          </MagneticButton>
+          <MagneticButton>
+            <a href="/images/Tahmidur_Rahman_Resume_FieldNation.pdf" download>
+              <Button
+                size="lg"
+                variant="outline"
+                className="hover:-translate-y-1 transition-all duration-300"
+              >
+                <FaDownload className="mr-2" />
+                Download CV
+              </Button>
+            </a>
+          </MagneticButton>
         </motion.div>
 
         {/* Social icons */}

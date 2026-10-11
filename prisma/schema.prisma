@@ -22,7 +22,7 @@ model Project {
   title           String
   description     String
   longDescription String
-  techStack       String   // JSON-encoded string[]
+  techStack       String
   githubLink      String?
   liveLink        String?
   imageUrl        String
@@ -35,20 +35,20 @@ model Project {
 }
 
 model Experience {
-  id               String @id @default(cuid())
+  id               String  @id @default(cuid())
   company          String
   role             String
   duration         String
   startDate        String
   endDate          String
-  responsibilities String // JSON-encoded string[]
-  achievements     String // JSON-encoded string[]
+  responsibilities String
+  achievements     String
   logo             String?
-  order            Int    @default(0)
+  order            Int     @default(0)
 }
 
 model Education {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   degree      String
   institution String
   duration    String
@@ -56,7 +56,7 @@ model Education {
   endDate     String
   description String
   gpa         String?
-  order       Int    @default(0)
+  order       Int     @default(0)
 }
 
 model Certification {

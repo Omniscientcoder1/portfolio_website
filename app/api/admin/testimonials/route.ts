@@ -7,7 +7,22 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const item = await prisma.testimonial.create({ data: body });
-  return NextResponse.json(item, { status: 201 });
+  try {
+    const body = await req.json();
+    const { name, role, company, content, imageUrl, order } = body;
+    const item = await prisma.testimonial.create({
+      data: {
+        name: String(name ?? ""),
+        role: String(role ?? ""),
+        company: String(company ?? ""),
+        content: String(content ?? ""),
+        imageUrl: imageUrl ? String(imageUrl) : null,
+        order: Number(order) || 0,
+      },
+    });
+    return NextResponse.json(item, { status: 201 });
+  } catch (err) {
+    console.error("POST /api/admin/testimonials:", err);
+    return NextResponse.json({ error: "Failed to create testimonial" }, { status: 500 });
+  }
 }

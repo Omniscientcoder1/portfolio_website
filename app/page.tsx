@@ -2,6 +2,8 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedProjectsSection } from "@/components/sections/FeaturedProjectsSection";
 import { ExperiencePreviewSection } from "@/components/sections/ExperiencePreviewSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { AboutPreviewSection } from "@/components/sections/AboutPreviewSection";
+import { CallToActionSection } from "@/components/sections/CallToActionSection";
 import { prisma } from "@/lib/prisma";
 import type { Experience, Project, Testimonial, SocialLink } from "@/types";
 
@@ -36,9 +38,11 @@ export default async function Home() {
   return (
     <>
       <HeroSection socialLinks={socialLinks as SocialLink[]} />
+      <AboutPreviewSection />
       <FeaturedProjectsSection projects={featuredProjects} />
       <ExperiencePreviewSection experiences={experiences} />
       <TestimonialsSection testimonials={testimonials as Testimonial[]} />
+      <CallToActionSection />
     </>
   );
 }

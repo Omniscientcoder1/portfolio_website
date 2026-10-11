@@ -57,20 +57,20 @@ export default function MessagesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Messages</h1>
-          <p className="text-foreground/60 mt-1">
+          <h1 className="text-2xl md:text-3xl text-foreground">Messages</h1>
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground mt-2">
             {messages.filter((m) => !m.read).length} unread · {messages.length} total
           </p>
         </div>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-foreground/40">
+        <div className="flex items-center justify-center py-20 text-accent">
           <FaSpinner className="animate-spin text-2xl" />
         </div>
       ) : messages.length === 0 ? (
-        <Card className="glass text-center py-16">
-          <p className="text-foreground/50">No messages yet.</p>
+        <Card variant="terminal" terminalTitle="inbox" className="text-center py-16 pt-20">
+          <p className="font-mono text-muted-foreground"><span className="text-accent-tertiary">$</span> inbox empty — no messages yet.</p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -81,28 +81,28 @@ export default function MessagesPage() {
                 key={msg.id}
                 onClick={() => openMessage(msg)}
                 className={cn(
-                  "p-4 rounded-xl border cursor-pointer transition-all",
+                  "relative p-4 border bg-card cursor-pointer transition-all duration-150",
                   selected?.id === msg.id
-                    ? "border-primary bg-primary/5"
-                    : "border-border bg-card hover:border-primary/50",
-                  !msg.read && "border-l-4 border-l-blue-500"
+                    ? "border-accent bg-accent/5 shadow-[inset_0_0_16px_rgba(0,255,136,0.08)]"
+                    : "border-border hover:border-accent/50",
+                  !msg.read && "border-l-2 border-l-accent-secondary"
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 text-foreground/40">
-                    {msg.read ? <FaEnvelopeOpen /> : <FaEnvelope className="text-blue-500" />}
+                  <div className="mt-0.5 text-accent">
+                    {msg.read ? <FaEnvelopeOpen /> : <FaEnvelope className="text-accent-secondary" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className={cn("text-sm font-medium truncate", !msg.read && "font-semibold")}>
+                      <span className={cn("text-sm font-medium truncate", !msg.read && "font-bold text-foreground")}>
                         {msg.name}
                       </span>
-                      <span className="text-xs text-foreground/40 shrink-0">
+                      <span className="font-mono text-xs text-muted-foreground shrink-0">
                         {new Date(msg.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-xs text-foreground/60 truncate">{msg.subject}</p>
-                    <p className="text-xs text-foreground/40 truncate mt-0.5">{msg.message}</p>
+                    <p className="text-xs text-accent-tertiary truncate">{msg.subject}</p>
+                    <p className="text-xs text-muted-foreground truncate mt-0.5">{msg.message}</p>
                   </div>
                 </div>
               </div>
@@ -111,15 +111,15 @@ export default function MessagesPage() {
 
           {/* Message detail */}
           {selected ? (
-            <Card className="glass sticky top-4 self-start">
-              <CardContent className="p-6">
+            <Card variant="terminal" terminalTitle="message.eml" className="sticky top-24 self-start">
+              <CardContent>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-semibold">{selected.subject}</h2>
-                    <p className="text-sm text-foreground/60">
+                    <h2 className="text-lg text-foreground">{selected.subject}</h2>
+                    <p className="text-sm text-muted-foreground">
                       From: <strong>{selected.name}</strong> ({selected.email})
                     </p>
-                    <p className="text-xs text-foreground/40 mt-0.5">
+                    <p className="font-mono text-xs text-muted-foreground mt-0.5">
                       {new Date(selected.createdAt).toLocaleString()}
                     </p>
                   </div>
@@ -133,28 +133,27 @@ export default function MessagesPage() {
                     </Button>
                     <Button
                       size="sm"
-                      variant="outline"
-                      className="text-red-500 hover:bg-red-500/10 border-red-500/30"
+                      variant="destructive"
                       onClick={() => deleteMessage(selected.id)}
                     >
                       <FaTrash />
                     </Button>
                   </div>
                 </div>
-                <div className="bg-foreground/5 rounded-lg p-4 text-sm whitespace-pre-wrap">
+                <div className="bg-background border border-border p-4 font-mono text-sm text-foreground/90 whitespace-pre-wrap">
                   {selected.message}
                 </div>
                 <a
                   href={`mailto:${selected.email}?subject=Re: ${encodeURIComponent(selected.subject)}`}
-                  className="mt-4 inline-block text-sm text-primary hover:underline"
+                  className="mt-4 inline-flex items-center min-h-11 font-label text-sm uppercase tracking-[0.2em] text-accent hover:text-glow"
                 >
                   Reply via email →
                 </a>
               </CardContent>
             </Card>
           ) : (
-            <Card className="glass flex items-center justify-center py-16">
-              <p className="text-foreground/40 text-sm">Select a message to read</p>
+            <Card variant="terminal" terminalTitle="message.eml" className="flex items-center justify-center py-16 pt-20">
+              <p className="font-mono text-muted-foreground text-sm cyber-cursor">Select a message to read</p>
             </Card>
           )}
         </div>

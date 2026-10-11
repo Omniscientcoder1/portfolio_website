@@ -43,3 +43,6 @@ prisma/*.db-journal
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# graphify knowledge graph output
+/graphify-out/

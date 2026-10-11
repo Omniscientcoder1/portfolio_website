@@ -2,11 +2,26 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Send, Mail, ShieldCheck, Loader2 } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
+import { IconBox } from "@/components/ui/IconBox";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { cn } from "@/lib/utils";
+
+const labelClasses = "block font-label text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2";
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={id} className="mt-2 font-mono text-xs text-destructive">
+      <span aria-hidden>[!] </span>
+      {message}
+    </p>
+  );
+}
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
@@ -95,41 +110,66 @@ export default function ContactPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen px-6 py-20">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Get In Touch</h1>
-          <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
-            Have a project in mind or want to collaborate? I'd love to hear from you!
-          </p>
-        </motion.div>
+  const invalid = (f: Fields) => Boolean(touched[f] && errors[f]);
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Card className="glass-strong">
-            <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <FaEnvelope className="text-primary" />
-                Send Me a Message
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+  return (
+    <div className="relative min-h-screen px-4 sm:px-6 py-16 md:py-24">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-96 cyber-grid [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div className="relative max-w-6xl mx-auto">
+        <SectionHeading
+          as="h1"
+          label="~/contact"
+          title="Get In Touch"
+          description="Have a project in mind or want to collaborate? I'd love to hear from you!"
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+          {/* Side panel */}
+          <motion.aside
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="lg:col-span-2 space-y-6"
+          >
+            <Card variant="holographic" className="px-6 gap-5">
+              <div className="flex items-center gap-4">
+                <IconBox size="lg" tone="tertiary">
+                  <ShieldCheck strokeWidth={1.5} />
+                </IconBox>
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Name
-                  </label>
-                  <div className="relative">
-                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/40" />
+                  <p className="font-heading uppercase tracking-wide text-foreground">Secure channel</p>
+                  <p className="font-label text-xs uppercase tracking-[0.2em] text-accent">Status: open</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                Messages are delivered straight to my inbox. Fill out every field and I&apos;ll get back to you soon.
+              </p>
+            </Card>
+
+            <div className="font-mono text-xs text-muted-foreground space-y-1.5 hidden lg:block" aria-hidden>
+              <p><span className="text-accent">✓</span> handshake established</p>
+              <p><span className="text-accent">✓</span> input validation armed</p>
+              <p><span className="text-accent-secondary">…</span> <span className="cyber-cursor">awaiting transmission</span></p>
+            </div>
+          </motion.aside>
+
+          {/* Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="lg:col-span-3"
+          >
+            <Card variant="terminal" terminalTitle="compose_message.sh" className="px-6 md:px-8">
+              <h2 className="text-xl text-foreground flex items-center gap-3">
+                <Mail className="size-5 text-accent" strokeWidth={1.5} aria-hidden />
+                Send Me a Message
+              </h2>
+
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className={labelClasses}>Name</label>
                     <Input
                       id="name"
                       type="text"
@@ -138,21 +178,15 @@ export default function ContactPage() {
                       onChange={(e) => handleChange("name", e.target.value)}
                       onBlur={() => handleBlur("name")}
                       maxLength={80}
-                      className={`pl-10 glass ${errors.name && touched.name ? "border-red-500/60" : ""}`}
+                      autoComplete="name"
+                      aria-invalid={invalid("name")}
                       aria-describedby={errors.name ? "name-error" : undefined}
                     />
+                    <FieldError id="name-error" message={touched.name ? errors.name : undefined} />
                   </div>
-                  {touched.name && errors.name && (
-                    <p id="name-error" className="mt-1.5 text-xs text-red-400">{errors.name}</p>
-                  )}
-                </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/40" />
+                  <div>
+                    <label htmlFor="email" className={labelClasses}>Email</label>
                     <Input
                       id="email"
                       type="email"
@@ -161,19 +195,16 @@ export default function ContactPage() {
                       onChange={(e) => handleChange("email", e.target.value)}
                       onBlur={() => handleBlur("email")}
                       maxLength={254}
-                      className={`pl-10 glass ${errors.email && touched.email ? "border-red-500/60" : ""}`}
+                      autoComplete="email"
+                      aria-invalid={invalid("email")}
                       aria-describedby={errors.email ? "email-error" : undefined}
                     />
+                    <FieldError id="email-error" message={touched.email ? errors.email : undefined} />
                   </div>
-                  {touched.email && errors.email && (
-                    <p id="email-error" className="mt-1.5 text-xs text-red-400">{errors.email}</p>
-                  )}
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                    Subject
-                  </label>
+                  <label htmlFor="subject" className={labelClasses}>Subject</label>
                   <Input
                     id="subject"
                     type="text"
@@ -182,24 +213,25 @@ export default function ContactPage() {
                     onChange={(e) => handleChange("subject", e.target.value)}
                     onBlur={() => handleBlur("subject")}
                     maxLength={120}
-                    className={`glass ${errors.subject && touched.subject ? "border-red-500/60" : ""}`}
+                    aria-invalid={invalid("subject")}
                     aria-describedby={errors.subject ? "subject-error" : undefined}
                   />
-                  {touched.subject && errors.subject && (
-                    <p id="subject-error" className="mt-1.5 text-xs text-red-400">{errors.subject}</p>
-                  )}
+                  <FieldError id="subject-error" message={touched.subject ? errors.subject : undefined} />
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label htmlFor="message" className="block text-sm font-medium">
-                      Message
-                    </label>
-                    <span className={`text-xs ${
-                      formData.message.length > 2800 ? "text-red-400" :
-                      formData.message.length > 2000 ? "text-yellow-400" :
-                      "text-foreground/40"
-                    }`}>
+                    <label htmlFor="message" className={cn(labelClasses, "mb-0")}>Message</label>
+                    <span
+                      className={cn(
+                        "font-mono text-xs",
+                        formData.message.length > 2800
+                          ? "text-destructive"
+                          : formData.message.length > 2000
+                            ? "text-warning"
+                            : "text-muted-foreground"
+                      )}
+                    >
                       {formData.message.length}/3000
                     </span>
                   </div>
@@ -210,45 +242,45 @@ export default function ContactPage() {
                     onChange={(e) => handleChange("message", e.target.value)}
                     onBlur={() => handleBlur("message")}
                     maxLength={3000}
-                    className={`glass min-h-[150px] ${errors.message && touched.message ? "border-red-500/60" : ""}`}
+                    className="min-h-[160px]"
+                    aria-invalid={invalid("message")}
                     aria-describedby={errors.message ? "message-error" : undefined}
                   />
-                  {touched.message && errors.message && (
-                    <p id="message-error" className="mt-1.5 text-xs text-red-400">{errors.message}</p>
-                  )}
+                  <FieldError id="message-error" message={touched.message ? errors.message : undefined} />
                 </div>
 
                 {message && (
                   <div
-                    className={`p-4 rounded-lg ${
+                    role={status === "success" ? "status" : "alert"}
+                    className={cn(
+                      "font-mono text-sm px-4 py-3 border-l-2",
                       status === "success"
-                        ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                        : "bg-red-500/10 text-red-600 dark:text-red-400"
-                    }`}
+                        ? "border-accent bg-accent/10 text-accent"
+                        : "border-destructive bg-destructive/10 text-destructive"
+                    )}
                   >
+                    <span aria-hidden>{status === "success" ? "[OK] " : "[ERR] "}</span>
                     {message}
                   </div>
                 )}
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full glass-strong"
-                  disabled={status === "loading"}
-                >
+                <Button type="submit" size="lg" variant="glitch" className="w-full" disabled={status === "loading"}>
                   {status === "loading" ? (
-                    "Sending..."
+                    <>
+                      <Loader2 className="animate-spin" strokeWidth={1.5} />
+                      Transmitting...
+                    </>
                   ) : (
                     <>
-                      <FaPaperPlane className="mr-2" />
+                      <Send strokeWidth={1.5} />
                       Send Message
                     </>
                   )}
                 </Button>
               </form>
-            </CardContent>
-          </Card>
-        </motion.div>
+            </Card>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { motion } from "framer-motion";
-import { FaSun, FaMoon, FaBars, FaTimes } from "react-icons/fa";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { GlitchText } from "@/components/ui/GlitchText";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -16,97 +19,132 @@ const navLinks = [
 ];
 
 export function Header() {
-  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
     <motion.header
-      initial={{ y: -100 }}
+      initial={{ y: -80 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 px-4 py-4"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="fixed top-0 inset-x-0 z-50 border-b border-border bg-background/85 backdrop-blur-md"
     >
-      <nav className="glass-solid-nav rounded-2xl shadow-2xl shadow-blue-500/20 max-w-7xl mx-auto px-6 py-4 border border-blue-400/20">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text">
-            Tahmidur Rahman
+      {/* Neon hairline along the bottom edge */}
+      <div aria-hidden className="absolute -bottom-px inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
+
+      <nav aria-label="Primary" className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="group flex items-center gap-3 min-h-11 focus-visible:outline-2 focus-visible:outline-accent-tertiary"
+        >
+          <span
+            aria-hidden
+            className="cyber-chamfer-sm cyber-frame relative size-9 grid place-items-center [--frame-color:var(--accent)] font-heading text-sm font-black text-accent text-glow"
+          >
+            TR
+          </span>
+          <span className="font-heading text-sm sm:text-base font-bold uppercase tracking-[0.2em] text-foreground group-hover:text-accent transition-colors duration-150">
+            <GlitchText text="Tahmidur" />
+            <span className="text-accent">_</span>
+          </span>
+        </Link>
+
+        {/* Desktop navigation */}
+        <ul className="hidden lg:flex items-center gap-1">
+          {navLinks.map((link, i) => {
+            const active = isActive(link.href);
+            return (
+              <li key={link.name}>
+                <Link
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative flex items-center gap-1.5 px-3 h-11 font-label text-xs uppercase tracking-[0.2em] transition-colors duration-150",
+                    "focus-visible:outline-2 focus-visible:outline-accent-tertiary",
+                    active ? "text-accent text-glow" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <span className={cn("text-[10px]", active ? "text-accent-secondary" : "text-border")}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {link.name}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active"
+                      aria-hidden
+                      className="absolute inset-x-3 -bottom-[11px] h-0.5 bg-accent shadow-neon"
+                      transition={{ duration: 0.15 }}
+                    />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="flex items-center gap-3">
+          <span className="hidden sm:inline-flex items-center gap-2 font-label text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="size-1.5 bg-accent shadow-neon-sm animate-flicker" />
+            Online
+          </span>
+
+          <Link href="/contact" className={cn(buttonVariants({ size: "sm" }), "hidden md:inline-flex")}>
+            Hire_me
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-foreground/80 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-
-          {/* Theme Toggle */}
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-lg glass-strong hover:scale-110 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? (
-                <FaSun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <FaMoon className="w-5 h-5 text-blue-600" />
-              )}
-            </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg glass-strong"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? (
-                <FaTimes className="w-5 h-5" />
-              ) : (
-                <FaBars className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+          {/* Mobile menu toggle */}
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            className="lg:hidden relative size-11 grid place-items-center cyber-chamfer-sm cyber-frame text-accent focus-visible:[--frame-color:var(--accent-tertiary)]"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-nav"
+          >
+            {isOpen ? <X className="size-5" strokeWidth={1.5} /> : <Menu className="size-5" strokeWidth={1.5} />}
+          </button>
         </div>
+      </nav>
 
-        {/* Mobile Navigation */}
+      {/* Mobile navigation */}
+      <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-nav"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mt-4 pt-4 border-t border-border"
+            transition={{ duration: 0.15 }}
+            className="lg:hidden overflow-hidden border-t border-border bg-background/95 cyber-grid"
           >
-            <div className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-foreground/80 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
+            <ul className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col">
+              {navLinks.map((link, i) => {
+                const active = isActive(link.href);
+                return (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 min-h-12 font-label text-sm uppercase tracking-[0.2em] border-b border-border/50",
+                        active ? "text-accent" : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <span className="text-accent-secondary text-xs">{String(i + 1).padStart(2, "0")}</span>
+                      <span aria-hidden>{active ? ">" : " "}</span>
+                      {link.name}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </motion.div>
         )}
-      </nav>
+      </AnimatePresence>
     </motion.header>
   );
 }

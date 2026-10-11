@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/types";
 
 type ProjectRow = Awaited<ReturnType<typeof prisma.project.findMany>>[number];
@@ -20,30 +22,22 @@ export default async function ProjectsPage() {
   const otherProjects = projects.filter((p) => !p.featured);
 
   return (
-    <div className="min-h-screen px-6 py-20">
-      <div className="max-w-7xl mx-auto">
-
-        {/* Page Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-blue-400/30 text-blue-400 text-sm font-medium mb-6">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Managed from Admin Panel
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            My{" "}
-            <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600 text-transparent bg-clip-text">
-              Projects
-            </span>
-          </h1>
-          <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
-            Projects and case studies curated directly from the admin dashboard
-          </p>
-        </div>
+    <div className="relative min-h-screen px-4 sm:px-6 py-16 md:py-24">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-96 cyber-grid [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div className="relative max-w-7xl mx-auto">
+        <Badge className="mb-6">
+          <span className="size-1.5 bg-accent animate-flicker" />
+          Managed from Admin Panel
+        </Badge>
+        <SectionHeading
+          as="h1"
+          label="~/projects"
+          title="My Projects"
+          description="Projects and case studies curated directly from the admin dashboard"
+        />
 
         <ProjectsGrid featuredProjects={featuredProjects} otherProjects={otherProjects} />
       </div>
     </div>
   );
 }
-
-

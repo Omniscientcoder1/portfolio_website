@@ -94,70 +94,70 @@ export default function ProjectsAdminPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Projects</h1>
-          <p className="text-foreground/60 mt-1">{items.length} total</p>
+          <h1 className="text-2xl md:text-3xl text-foreground">Projects</h1>
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground mt-2">{items.length} total</p>
         </div>
-        <Button onClick={openNew}><FaPlus className="mr-2" /> Add Project</Button>
+        <Button variant="glitch" onClick={openNew}><FaPlus className="mr-2" /> Add Project</Button>
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20 text-foreground/40"><FaSpinner className="animate-spin text-2xl" /></div>
+        <div className="flex justify-center py-20 text-accent"><FaSpinner className="animate-spin text-2xl" /></div>
       ) : (
-        <Card className="glass">
-          <CardContent className="p-0 pt-4">
+        <Card className="py-0 gap-0">
+          <CardContent className="p-0">
             <AdminTable data={items} columns={columns} onEdit={openEdit} onDelete={handleDelete} />
           </CardContent>
         </Card>
       )}
 
       {editing && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && closeForm()}>
-          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-strong">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-background/80 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && closeForm()}>
+          <Card variant="terminal" terminalTitle="edit_record.sh" className="w-full max-w-2xl my-auto">
             <CardHeader>
               <CardTitle>{editing.id ? "Edit Project" : "New Project"}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Title *</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Title *</label>
                   <Input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} placeholder="Project title" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Slug *</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Slug *</label>
                   <Input value={form.slug} onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))} placeholder="my-project-slug" />
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Short Description *</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Short Description *</label>
                 <Textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} rows={2} />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Long Description</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Long Description</label>
                 <Textarea value={form.longDescription} onChange={(e) => setForm((p) => ({ ...p, longDescription: e.target.value }))} rows={4} />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Tech Stack (comma-separated)</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Tech Stack (comma-separated)</label>
                 <Input value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="React, Next.js, TypeScript" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">GitHub Link</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">GitHub Link</label>
                   <Input value={form.githubLink ?? ""} onChange={(e) => setForm((p) => ({ ...p, githubLink: e.target.value }))} placeholder="https://github.com/..." />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Live Link</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Live Link</label>
                   <Input value={form.liveLink ?? ""} onChange={(e) => setForm((p) => ({ ...p, liveLink: e.target.value }))} placeholder="https://..." />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Image URL</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Image URL</label>
                   <Input value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, imageUrl: e.target.value }))} placeholder="/images/projects/..." />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Status</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Status</label>
                   <select
-                    className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                    className="w-full h-11"
                     value={form.status}
                     onChange={(e) => setForm((p) => ({ ...p, status: e.target.value }))}
                   >
@@ -169,7 +169,7 @@ export default function ProjectsAdminPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Order</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Order</label>
                   <Input type="number" value={form.order} onChange={(e) => setForm((p) => ({ ...p, order: parseInt(e.target.value) || 0 }))} />
                 </div>
                 <div className="flex items-center gap-2 pt-5">
@@ -178,7 +178,7 @@ export default function ProjectsAdminPage() {
                     id="featured"
                     checked={form.featured}
                     onChange={(e) => setForm((p) => ({ ...p, featured: e.target.checked }))}
-                    className="w-4 h-4"
+                    className="size-4"
                   />
                   <label htmlFor="featured" className="text-sm">Featured on homepage</label>
                 </div>

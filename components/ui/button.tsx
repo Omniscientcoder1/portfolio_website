@@ -5,28 +5,58 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  [
+    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap",
+    "font-label text-sm uppercase tracking-[0.2em]",
+    "transition-all duration-150 ease-digital",
+    "disabled:pointer-events-none disabled:opacity-50",
+    "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0",
+    // clip-path swallows outer rings, so focus is drawn inset (visible on chamfered variants too)
+    "outline-none focus-visible:[--frame-color:var(--accent-tertiary)]",
+    "focus-visible:shadow-[inset_0_0_0_2px_var(--accent-tertiary),inset_0_0_16px_rgba(0,212,255,0.45)]",
+    "aria-invalid:[--frame-color:var(--destructive)]",
+  ],
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border border-blue-400/30 bg-transparent shadow-xs hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400 backdrop-blur-sm",
-        secondary:
-          "bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-400/30 hover:bg-blue-500/30 backdrop-blur-sm",
-        ghost:
-          "hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400",
-        link: "text-blue-500 dark:text-blue-400 underline-offset-4 hover:underline",
+        // Neon outline → floods with accent on hover
+        default: [
+          "cyber-chamfer-sm cyber-frame [--frame-w:2px] [--frame-color:var(--accent)]",
+          "bg-transparent text-accent",
+          "hover:bg-accent hover:text-background hover:shadow-[inset_0_0_14px_rgba(0,0,0,0.25)]",
+        ],
+        secondary: [
+          "cyber-chamfer-sm cyber-frame [--frame-w:2px] [--frame-color:var(--accent-secondary)]",
+          "bg-transparent text-accent-secondary",
+          "hover:bg-accent-secondary hover:text-background",
+        ],
+        outline: [
+          "cyber-chamfer-sm cyber-frame",
+          "bg-transparent text-foreground",
+          "hover:[--frame-color:var(--accent)] hover:text-accent hover:shadow-[inset_0_0_12px_rgba(0,255,136,0.25)]",
+        ],
+        ghost: "text-foreground hover:bg-accent/10 hover:text-accent",
+        destructive: [
+          "cyber-chamfer-sm cyber-frame [--frame-color:var(--destructive)]",
+          "bg-transparent text-destructive",
+          "hover:bg-destructive hover:text-background",
+        ],
+        // Solid CTA with chromatic aberration
+        glitch: [
+          "cyber-chamfer-sm bg-accent text-background font-bold",
+          "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.2)]",
+          "hover:brightness-110 hover:[text-shadow:-2px_0_var(--accent-secondary),2px_0_var(--accent-tertiary)]",
+          "active:translate-y-px",
+        ],
+        link: "text-accent underline-offset-4 hover:underline normal-case tracking-normal font-mono",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        default: "h-11 px-5 py-2 has-[>svg]:px-4",
+        sm: "h-9 gap-1.5 px-3 text-xs has-[>svg]:px-2.5",
+        lg: "h-12 px-8 has-[>svg]:px-6",
+        icon: "size-11",
+        "icon-sm": "size-9",
+        "icon-lg": "size-12",
       },
     },
     defaultVariants: {

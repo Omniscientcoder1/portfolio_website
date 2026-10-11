@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   FaHome, FaEnvelope, FaProjectDiagram, FaBriefcase,
-  FaGraduationCap, FaCertificate, FaQuoteLeft, FaShare, FaSignOutAlt,
+  FaGraduationCap, FaCertificate, FaQuoteLeft, FaShare, FaSignOutAlt, FaExternalLinkAlt,
 } from "react-icons/fa";
 
 const navItems = [
@@ -19,6 +19,9 @@ const navItems = [
   { href: "/admin/social", label: "Social Links", icon: FaShare },
 ];
 
+const itemClasses =
+  "relative flex items-center gap-3 px-3 min-h-11 font-label text-xs uppercase tracking-[0.18em] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-accent-tertiary";
+
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -31,42 +34,49 @@ export default function AdminSidebar() {
   return (
     <aside className="w-60 shrink-0 min-h-screen bg-card border-r border-border flex flex-col">
       <div className="p-6 border-b border-border">
-        <Link href="/admin/dashboard" className="text-lg font-bold text-primary">
-          ⚡ Admin Panel
+        <Link href="/admin/dashboard" className="font-heading text-base font-black uppercase tracking-[0.2em] text-accent text-glow">
+          Admin_Panel
         </Link>
-        <p className="text-xs text-foreground/50 mt-1">Portfolio Manager</p>
+        <p className="font-label text-[11px] uppercase tracking-[0.25em] text-muted-foreground mt-1">
+          <span className="text-accent">●</span> root access
+        </p>
       </div>
-      <nav className="flex-1 p-3 space-y-1">
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-              pathname.startsWith(href)
-                ? "bg-primary/10 text-primary font-medium"
-                : "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
-            )}
-          >
-            <Icon className="text-base shrink-0" />
-            {label}
-          </Link>
-        ))}
+      <nav aria-label="Admin" className="flex-1 p-3 space-y-0.5">
+        {navItems.map(({ href, label, icon: Icon }) => {
+          const active = pathname.startsWith(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                itemClasses,
+                active
+                  ? "bg-accent/10 text-accent before:absolute before:left-0 before:inset-y-1 before:w-0.5 before:bg-accent before:shadow-neon"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              <Icon className="text-sm shrink-0" />
+              {label}
+            </Link>
+          );
+        })}
       </nav>
-      <div className="p-3 border-t border-border space-y-1">
+      <div className="p-3 border-t border-border space-y-0.5">
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground/70 hover:bg-foreground/5 hover:text-foreground transition-colors"
+          className={cn(itemClasses, "text-muted-foreground hover:bg-muted hover:text-accent-tertiary")}
         >
-          <FaHome className="text-base shrink-0" />
+          <FaExternalLinkAlt className="text-sm shrink-0" />
           View Website
         </Link>
         <button
+          type="button"
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-500/10 transition-colors"
+          className={cn(itemClasses, "w-full text-destructive hover:bg-destructive/10")}
         >
-          <FaSignOutAlt className="text-base shrink-0" />
+          <FaSignOutAlt className="text-sm shrink-0" />
           Sign Out
         </button>
       </div>

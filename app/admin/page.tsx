@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { IconBox } from "@/components/ui/IconBox";
+import { GlitchText } from "@/components/ui/GlitchText";
 import { FaLock, FaUser } from "react-icons/fa";
 
 export default function AdminLoginPage() {
@@ -37,49 +39,62 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md glass-strong">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-            <FaLock className="text-primary text-2xl" />
-          </div>
-          <CardTitle className="text-2xl">Admin Panel</CardTitle>
-          <p className="text-sm text-foreground/60">Sign in to manage your portfolio</p>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
-              <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40 text-sm" />
-              <Input
-                placeholder="Username"
-                className="pl-9"
-                value={creds.username}
-                onChange={(e) => setCreds((p) => ({ ...p, username: e.target.value }))}
-                autoComplete="username"
-                required
-              />
+    <div className="relative min-h-[80vh] flex items-center justify-center px-4 py-16">
+      <div aria-hidden className="absolute inset-0 cyber-grid [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)]" />
+      <div className="relative w-full max-w-md cyber-glow-wrap">
+        <Card variant="terminal" terminalTitle="ssh root@portfolio" className="w-full">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-4">
+              <IconBox size="lg">
+                <FaLock />
+              </IconBox>
             </div>
-            <div className="relative">
-              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40 text-sm" />
-              <Input
-                type="password"
-                placeholder="Password"
-                className="pl-9"
-                value={creds.password}
-                onChange={(e) => setCreds((p) => ({ ...p, password: e.target.value }))}
-                autoComplete="current-password"
-                required
-              />
-            </div>
-            {error && (
-              <p className="text-sm text-red-500 bg-red-500/10 rounded px-3 py-2">{error}</p>
-            )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in…" : "Sign In"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            <CardTitle className="text-2xl">
+              <GlitchText text="Admin Panel" />
+            </CardTitle>
+            <p className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Authenticate to manage your portfolio
+            </p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="admin-username" className="sr-only">Username</label>
+                <Input
+                  id="admin-username"
+                  promptSymbol={<FaUser className="size-3" />}
+                  placeholder="Username"
+                  value={creds.username}
+                  onChange={(e) => setCreds((p) => ({ ...p, username: e.target.value }))}
+                  autoComplete="username"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="admin-password" className="sr-only">Password</label>
+                <Input
+                  id="admin-password"
+                  type="password"
+                  promptSymbol={<FaLock className="size-3" />}
+                  placeholder="Password"
+                  value={creds.password}
+                  onChange={(e) => setCreds((p) => ({ ...p, password: e.target.value }))}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+              {error && (
+                <p role="alert" className="font-mono text-sm text-destructive bg-destructive/10 border-l-2 border-destructive px-3 py-2">
+                  <span aria-hidden>[ACCESS DENIED] </span>{error}
+                </p>
+              )}
+              <Button type="submit" variant="glitch" className="w-full" disabled={loading}>
+                {loading ? "Authenticating…" : "Sign In"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

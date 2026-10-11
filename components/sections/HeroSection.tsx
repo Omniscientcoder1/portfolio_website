@@ -1,237 +1,197 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaYoutube, FaInstagram, FaFacebook, FaExternalLinkAlt, FaDownload } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { Download, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { IconBox } from "@/components/ui/IconBox";
+import { GlitchText } from "@/components/ui/GlitchText";
+import { Typewriter } from "@/components/ui/Typewriter";
+import { getSocialIcon } from "@/lib/social-icons";
 import type { SocialLink } from "@/types";
 
-const TECH_BADGES = [
-  { label: "React.js",    pos: "top-28 left-[6%]" },
-  { label: "Next.js",     pos: "bottom-32 left-[5%]" },
-  { label: "TypeScript",  pos: "top-1/3 right-[4%]" },
-  { label: "Node.js",     pos: "bottom-1/4 right-[6%]" },
-  { label: "MongoDB",     pos: "top-20 right-[18%]" },
-  { label: "Docker",      pos: "bottom-40 left-[15%]" },
+const TECH_STACK = ["React.js", "Next.js", "TypeScript", "Node.js", "MongoDB", "Docker"];
+
+const STATS = [
+  { value: "04", label: "Production sites shipped" },
+  { value: "60%", label: "Faster eKYC verification" },
+  { value: "70%", label: "Faster document access" },
 ];
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  FaGithub,
-  FaLinkedin,
-  FaTwitter,
-  FaEnvelope,
-  FaYoutube,
-  FaInstagram,
-  FaFacebook,
-};
+const SUBTITLE =
+  "Software Engineer specializing in full-stack development with React, Next.js & Node.js — building secure, high-performance web applications.";
+
+const enter = (delay: number) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.3, delay, ease: [0.4, 0, 0.2, 1] as const },
+});
 
 export function HeroSection({ socialLinks }: { socialLinks: SocialLink[] }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const mx = useMotionValue(0.5);
-  const my = useMotionValue(0.5);
-
-  const sx = useSpring(mx, { stiffness: 40, damping: 18 });
-  const sy = useSpring(my, { stiffness: 40, damping: 18 });
-
-  // Three parallax depth layers
-  const x1 = useTransform(sx, [0, 1], [-28, 28]);
-  const y1 = useTransform(sy, [0, 1], [-14, 14]);
-  const x2 = useTransform(sx, [0, 1], [-14, 14]);
-  const y2 = useTransform(sy, [0, 1], [-7, 7]);
-  const x3 = useTransform(sx, [0, 1], [-5, 5]);
-  const y3 = useTransform(sy, [0, 1], [-3, 3]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = sectionRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    mx.set((e.clientX - rect.left) / rect.width);
-    my.set((e.clientY - rect.top) / rect.height);
-  };
-
   return (
-    <section
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => { mx.set(0.5); my.set(0.5); }}
-      style={{ perspective: "1200px" }}
-      className="min-h-[95vh] flex items-center justify-center px-6 overflow-hidden relative"
-    >
-      {/* Background dot grid */}
+    <section className="relative overflow-hidden">
+      {/* Grid + circuit backdrop, faded at the edges */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(rgba(59,130,246,0.25) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-        }}
+        aria-hidden
+        className="absolute inset-0 cyber-grid [mask-image:radial-gradient(ellipse_80%_70%_at_40%_40%,black_30%,transparent_100%)]"
       />
+      <div aria-hidden className="absolute inset-0 cyber-circuit opacity-60 [mask-image:linear-gradient(to_left,black,transparent_60%)]" />
 
-      {/* Rotating 3D ring (back layer) */}
-      <motion.div
-        style={{ x: x3, y: y3 }}
-        className="absolute right-[8%] top-[18%] w-72 h-72 pointer-events-none hidden lg:block"
-      >
-        <motion.div
-          animate={{ rotateZ: 360 }}
-          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-          style={{ transformStyle: "preserve-3d" }}
-          className="w-full h-full"
-        >
-          <div className="absolute inset-0 rounded-full border border-blue-500/20" />
-          <div
-            className="absolute inset-6 rounded-full border border-cyan-400/15"
-            style={{ transform: "rotateX(65deg)" }}
-          />
-          <div
-            className="absolute inset-14 rounded-full border-2 border-blue-400/10"
-            style={{ transform: "rotateX(65deg) rotateZ(60deg)" }}
-          />
-        </motion.div>
-      </motion.div>
-
-      {/* Pulsing orb (mid layer) */}
-      <motion.div
-        style={{ x: x2, y: y2 }}
-        className="absolute left-[4%] bottom-[22%] w-52 h-52 pointer-events-none hidden lg:block"
-      >
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.1, 0.25] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/25 to-cyan-500/10 blur-2xl"
-        />
-        <div className="absolute inset-10 rounded-full border border-blue-400/20" />
-      </motion.div>
-
-      {/* Floating tech badges (front layer) */}
-      {TECH_BADGES.map(({ label, pos }, i) => (
-        <motion.div
-          key={label}
-          style={{ x: i < 3 ? x1 : x2, y: i < 3 ? y1 : y2 }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 1.0 + i * 0.1 }}
-          className={`absolute pointer-events-none hidden xl:block ${pos}`}
-        >
-          <div className="px-3 py-1.5 rounded-full glass-strong border border-blue-400/25 text-xs text-blue-400/80 font-mono shadow-md shadow-blue-500/10">
-            {label}
-          </div>
-        </motion.div>
-      ))}
-
-      {/* Main content (mid parallax layer) */}
-      <motion.div
-        style={{ x: x2, y: y2 }}
-        className="max-w-4xl mx-auto w-full text-center relative z-10"
-      >
-        {/* Name heading */}
-        <div className="mb-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-20 lg:pt-20 lg:pb-28 grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-10 items-center min-h-[calc(100vh-6rem)]">
+        {/* ── Left 60%: identity ─────────────────────────── */}
+        <div className="lg:col-span-3">
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="text-2xl md:text-3xl text-foreground/50 font-light mb-3"
+            {...enter(0)}
+            className="font-label text-xs sm:text-sm uppercase tracking-[0.3em] text-accent mb-6 flex items-center gap-3"
           >
-            Hi, I&apos;m
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, rotateX: -30, y: 40 }}
-            animate={{ opacity: 1, rotateX: 0, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 80 }}
-            style={{ transformStyle: "preserve-3d" }}
-            className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight"
-          >
-            <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600 text-transparent bg-clip-text animate-gradient">
-              Tahmidur Rahman
+            <span aria-hidden className="h-px w-10 bg-accent shadow-neon-sm" />
+            <span>
+              <span className="text-accent-tertiary">$</span> whoami
             </span>
+          </motion.p>
+
+          <motion.h1
+            {...enter(0.1)}
+            className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-wider sm:tracking-widest mb-8"
+          >
+            <GlitchText text="Tahmidur" className="text-foreground" />
+            <br />
+            <GlitchText text="Rahman" className="text-accent drop-glow" />
           </motion.h1>
+
+          <motion.p
+            {...enter(0.2)}
+            className="text-base md:text-lg xl:text-xl text-muted-foreground leading-relaxed max-w-2xl mb-10 min-h-[5.5em] md:min-h-[4.5em]"
+          >
+            <span aria-hidden className="text-accent-secondary mr-2">&gt;</span>
+            <Typewriter text={SUBTITLE} delay={600} />
+          </motion.p>
+
+          <motion.div {...enter(0.3)} className="flex flex-wrap gap-4 mb-10">
+            <Button asChild variant="glitch" size="lg">
+              <Link href="/contact">Get In Touch</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href="/images/Tahmidur_Rahman_Resume_FieldNation.pdf" download>
+                <Download strokeWidth={1.5} />
+                Download CV
+              </a>
+            </Button>
+          </motion.div>
+
+          <motion.ul {...enter(0.4)} className="flex flex-wrap gap-2" aria-label="Social links">
+            {socialLinks.map((social) => {
+              const Icon = getSocialIcon(social.icon);
+              return (
+                <li key={social.id}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.name}
+                    className="block focus-visible:outline-2 focus-visible:outline-accent-tertiary"
+                  >
+                    <IconBox interactive>
+                      <Icon />
+                    </IconBox>
+                  </a>
+                </li>
+              );
+            })}
+          </motion.ul>
         </div>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-          className="text-lg md:text-xl text-foreground/60 mb-10 max-w-2xl mx-auto leading-relaxed"
-        >
-          Software Engineer specializing in full-stack development with{" "}
-          <span className="text-blue-400 font-medium">React</span>,{" "}
-          <span className="text-cyan-400 font-medium">Next.js</span> &amp;{" "}
-          <span className="text-blue-400 font-medium">Node.js</span> — building
-          secure, high-performance web applications
-        </motion.p>
-
-        {/* CTA Buttons */}
+        {/* ── Right 40%: HUD panel (desktop only) ───────── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="flex flex-wrap gap-4 justify-center mb-12"
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          className="hidden lg:block lg:col-span-2 relative"
+          aria-hidden
         >
-          <Link href="/contact">
-            <Button
-              size="lg"
-              className="shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300"
+          <Card variant="holographic" className="px-6 gap-5 rotate-1">
+            <div className="flex items-center justify-between font-label text-[11px] uppercase tracking-[0.25em]">
+              <span className="text-accent">{"// "}operator.profile</span>
+              <span className="text-muted-foreground">id:0x7A3F</span>
+            </div>
+
+            <dl className="font-mono text-sm space-y-2.5">
+              {[
+                ["name", "Tahmidur Rahman"],
+                ["role", "Software Engineer"],
+                ["focus", "full-stack // infosec"],
+                ["status", "building_secure_systems"],
+              ].map(([k, v]) => (
+                <div key={k} className="flex gap-3">
+                  <dt className="text-accent-tertiary w-16 shrink-0">{k}:</dt>
+                  <dd className="text-foreground truncate">{v}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div>
+              <p className="font-label text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-3">
+                Loaded modules [{TECH_STACK.length}]
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {TECH_STACK.map((t, i) => (
+                  <Badge key={t} variant={i % 3 === 0 ? "default" : i % 3 === 1 ? "tertiary" : "secondary"}>
+                    {t}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Signal meter (decorative) */}
+            <div className="flex items-end gap-1 h-10 pt-2 border-t border-accent/20">
+              {Array.from({ length: 28 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="flex-1 bg-accent/60 animate-flicker"
+                  style={{ height: `${25 + ((i * 37) % 75)}%`, animationDelay: `${(i % 7) * 0.4}s` }}
+                />
+              ))}
+            </div>
+          </Card>
+
+          {/* Overlapping terminal — breaks the grid on purpose */}
+          <div className="absolute -bottom-16 -left-12 w-72 -rotate-2 [filter:drop-shadow(0_0_6px_rgba(255,0,255,0.5))_drop-shadow(0_0_18px_rgba(255,0,255,0.2))]">
+            <Card
+              variant="terminal"
+              terminalTitle="build.log"
+              className="py-4 pt-12 px-4 [--frame-color:rgba(255,0,255,0.6)]"
             >
-              Get In Touch
-            </Button>
-          </Link>
-          <a href="/images/Tahmidur_Rahman_Resume_FieldNation.pdf" download>
-            <Button
-              size="lg"
-              variant="outline"
-              className="hover:-translate-y-1 transition-all duration-300"
-            >
-              <FaDownload className="mr-2" />
-              Download CV
-            </Button>
-          </a>
+              <pre className="font-mono text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                <span className="text-accent-tertiary">$</span> npm run build{"\n"}
+                <span className="text-accent">✓</span> compiled successfully{"\n"}
+                <span className="text-accent">✓</span> 0 vulnerabilities{"\n"}
+                <span className="text-accent-secondary">→</span> <span className="cyber-cursor">deploying</span>
+              </pre>
+            </Card>
+          </div>
         </motion.div>
+      </div>
 
-        {/* Social icons */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.75 }}
-          className="flex gap-4 justify-center"
-        >
-          {socialLinks.map((social) => {
-            const Icon = iconMap[social.icon] ?? FaExternalLinkAlt;
-            return (
-              <motion.a
-                key={social.id}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.name}
-                whileHover={{ scale: 1.15, y: -4 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-3 rounded-xl glass-strong shadow-md hover:shadow-blue-500/40 transition-shadow duration-300"
-              >
-                <Icon className="w-6 h-6 text-blue-400" />
-              </motion.a>
-            );
-          })}
-        </motion.div>
-      </motion.div>
+      {/* ── Stats band ───────────────────────────────────── */}
+      <div className="relative border-y border-border bg-card/70 backdrop-blur-sm">
+        <dl className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-border">
+          {STATS.map((s) => (
+            <div key={s.label} className="py-6 sm:px-8 first:sm:pl-0 flex items-baseline gap-4 border-b sm:border-b-0 border-border last:border-b-0">
+              <dt className="sr-only">{s.label}</dt>
+              <dd className="font-heading text-3xl md:text-4xl font-black text-accent text-glow">{s.value}</dd>
+              <dd className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">{s.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-foreground/30 text-xs pointer-events-none"
-      >
-        <span className="tracking-widest uppercase text-[10px]">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-          className="w-5 h-8 rounded-full border border-foreground/15 flex items-start justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-blue-400/50" />
-        </motion.div>
-      </motion.div>
+      {/* Scroll cue */}
+      <div aria-hidden className="hidden lg:flex absolute bottom-32 right-6 flex-col items-center gap-2 font-label text-[10px] uppercase tracking-[0.3em] text-muted-foreground [writing-mode:vertical-rl]">
+        scroll_down
+        <ChevronDown className="size-4 text-accent animate-blink" strokeWidth={1.5} />
+      </div>
     </section>
   );
 }

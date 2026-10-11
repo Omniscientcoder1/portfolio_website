@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { FaGithub, FaExternalLinkAlt, FaArrowLeft } from "react-icons/fa";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { GlitchText } from "@/components/ui/GlitchText";
 import { prisma } from "@/lib/prisma";
 
 type ProjSlugRow = { slug: string };
@@ -28,75 +31,77 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   };
 
   return (
-    <div className="min-h-screen px-6 py-20">
-      <div className="max-w-4xl mx-auto">
-        <Link href="/projects">
-          <Button variant="ghost" className="mb-8">
-            <FaArrowLeft className="mr-2" />
-            Back to Projects
-          </Button>
-        </Link>
+    <div className="relative min-h-screen px-4 sm:px-6 py-12 md:py-20">
+      <div className="max-w-5xl mx-auto">
+        <Button asChild variant="ghost" className="mb-8 -ml-3">
+          <Link href="/projects">
+            <ArrowLeft strokeWidth={1.5} />
+            cd ../projects
+          </Link>
+        </Button>
 
-        <Card className="glass-strong">
-          <div className="relative h-96 bg-secondary/20 rounded-t-xl">
-            <div className="w-full h-full flex items-center justify-center text-foreground/20 font-bold text-9xl">
-              {project.title[0]}
-            </div>
-          </div>
+        {/* Visual banner */}
+        <div className="relative h-56 md:h-80 cyber-chamfer cyber-frame bg-card cyber-grid overflow-hidden mb-10 grid place-items-center">
+          <div aria-hidden className="absolute inset-0 cyber-circuit opacity-70" />
+          <span aria-hidden className="relative font-heading font-black text-[8rem] md:text-[12rem] leading-none text-accent/80 drop-glow">
+            <GlitchText text={project.title.charAt(0).toUpperCase()} />
+          </span>
+          <span className="absolute top-4 left-5 font-label text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+            {"// "}project.preview
+          </span>
+          {project.featured && (
+            <Badge variant="secondary" className="absolute top-4 right-5">★ Featured</Badge>
+          )}
+        </div>
 
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <CardTitle className="text-4xl mb-4">{project.title}</CardTitle>
-            </div>
-            <p className="text-xl text-foreground/70">{project.description}</p>
-          </CardHeader>
+        <header className="mb-10">
+          <p className="font-label text-xs uppercase tracking-[0.3em] text-accent mb-3">~/projects/{project.slug}</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight mb-5">
+            <GlitchText text={project.title} />
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">{project.description}</p>
+        </header>
 
-          <CardContent className="space-y-8">
-            <div>
-              <h3 className="text-2xl font-semibold mb-4">About This Project</h3>
-              <p className="text-foreground/80 leading-relaxed">{project.longDescription}</p>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card variant="terminal" terminalTitle="readme.md" className="lg:col-span-2 px-6">
+            <h2 className="text-xl text-foreground">
+              <span className="text-accent mr-2" aria-hidden>#</span>About This Project
+            </h2>
+            <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{project.longDescription}</p>
+          </Card>
 
-            <div>
-              <h3 className="text-2xl font-semibold mb-4">Tech Stack</h3>
-              <div className="flex flex-wrap gap-3">
+          <div className="space-y-8">
+            <Card className="px-6">
+              <h2 className="text-base text-foreground">
+                <span className="text-accent-tertiary mr-2" aria-hidden>{"//"}</span>Tech Stack
+              </h2>
+              <div className="flex flex-wrap gap-2">
                 {project.techStack.map((tech: string) => (
-                  <span
-                    key={tech}
-                    className="px-4 py-2 bg-primary/10 text-primary rounded-lg font-medium"
-                  >
-                    {tech}
-                  </span>
+                  <Badge key={tech} variant="tertiary">{tech}</Badge>
                 ))}
               </div>
-            </div>
+            </Card>
 
-            <div className="flex flex-wrap gap-4">
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button className="glass-strong">
-                  <FaGithub className="mr-2" />
-                  View Code
+            <div className="flex flex-col gap-3">
+              {project.githubLink && (
+                <Button asChild variant="glitch" size="lg" className="w-full">
+                  <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                    <FaGithub />
+                    View Code
+                  </a>
                 </Button>
-              </a>
+              )}
               {project.liveLink && (
-                <a
-                  href={project.liveLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="glass-strong">
-                    <FaExternalLinkAlt className="mr-2" />
+                <Button asChild variant="outline" size="lg" className="w-full">
+                  <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink strokeWidth={1.5} />
                     Live Demo
-                  </Button>
-                </a>
+                  </a>
+                </Button>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

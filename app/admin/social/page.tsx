@@ -64,37 +64,37 @@ export default function SocialAdminPage() {
   ];
 
   const F = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <div className="space-y-1"><label className="text-xs font-medium text-foreground/70">{label}</label>{children}</div>
+    <div className="space-y-1"><label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</label>{children}</div>
   );
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Social Links</h1>
-          <p className="text-foreground/60 mt-1">{items.length} links</p>
+          <h1 className="text-2xl md:text-3xl text-foreground">Social Links</h1>
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground mt-2">{items.length} links</p>
         </div>
-        <Button onClick={openNew}><FaPlus className="mr-2" /> Add Link</Button>
+        <Button variant="glitch" onClick={openNew}><FaPlus className="mr-2" /> Add Link</Button>
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20 text-foreground/40"><FaSpinner className="animate-spin text-2xl" /></div>
+        <div className="flex justify-center py-20 text-accent"><FaSpinner className="animate-spin text-2xl" /></div>
       ) : (
-        <Card className="glass"><CardContent className="p-0 pt-4">
+        <Card className="py-0 gap-0"><CardContent className="p-0">
           <AdminTable data={items} columns={columns} onEdit={openEdit} onDelete={handleDelete} />
         </CardContent></Card>
       )}
 
       {editing && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setEditing(null)}>
-          <Card className="w-full max-w-md glass-strong">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-background/80 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && setEditing(null)}>
+          <Card variant="terminal" terminalTitle="edit_record.sh" className="w-full max-w-md my-auto">
             <CardHeader><CardTitle>{editing.id ? "Edit Social Link" : "New Social Link"}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <F label="Name *"><Input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="GitHub" /></F>
               <F label="URL *"><Input value={form.url} onChange={(e) => setForm((p) => ({ ...p, url: e.target.value }))} placeholder="https://github.com/..." /></F>
               <F label="Icon (react-icons name)">
                 <Input value={form.icon} onChange={(e) => setForm((p) => ({ ...p, icon: e.target.value }))} placeholder="FaGithub" />
-                <p className="text-xs text-foreground/40 mt-1">Use names like FaGithub, FaLinkedin, FaTwitter, FaEnvelope</p>
+                <p className="font-mono text-xs text-muted-foreground mt-1">Use names like FaGithub, FaLinkedin, FaTwitter, FaEnvelope</p>
               </F>
               <F label="Order"><Input type="number" value={form.order} onChange={(e) => setForm((p) => ({ ...p, order: parseInt(e.target.value) || 0 }))} /></F>
               <div className="flex gap-3 pt-2">

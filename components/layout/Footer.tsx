@@ -1,77 +1,95 @@
 import Link from "next/link";
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaYoutube, FaInstagram, FaFacebook } from "react-icons/fa";
 import { prisma } from "@/lib/prisma";
+import { getSocialIcon } from "@/lib/social-icons";
+import { IconBox } from "@/components/ui/IconBox";
 
 type SocialRow = Awaited<ReturnType<typeof prisma.socialLink.findMany>>[number];
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaYoutube, FaInstagram, FaFacebook,
-};
+const footerLinks = [
+  { name: "About", href: "/about" },
+  { name: "Projects", href: "/projects" },
+  { name: "Experience", href: "/experience" },
+  { name: "Education", href: "/education" },
+  { name: "Contact", href: "/contact" },
+];
+
+const headingClasses = "font-label text-xs uppercase tracking-[0.3em] text-accent-tertiary mb-5";
 
 export async function Footer() {
   const socialLinks = await prisma.socialLink.findMany({ orderBy: { order: "asc" } });
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="glass-strong mt-20 border-t border-blue-400/30 backdrop-blur-xl shadow-2xl">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text mb-4">Portfolio</h3>
-            <p className="text-foreground/70">
-              Building exceptional digital experiences with modern technologies.
-            </p>
-          </div>
+    <footer className="relative mt-24 border-t border-border bg-card/60 cyber-grid">
+      <div aria-hidden className="absolute -top-px inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-secondary/70 to-transparent" />
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <div className="flex flex-col space-y-2">
-              <Link
-                href="/about"
-                className="text-foreground/70 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/projects"
-                className="text-foreground/70 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              >
-                Projects
-              </Link>
-              <Link
-                href="/contact"
-                className="text-foreground/70 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Connect</h4>
-            <div className="flex space-x-4">
-              {socialLinks.map((social: SocialRow) => {
-                const Icon = iconMap[social.icon];
-                return (
-                  <a
-                    key={social.id}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-lg glass-strong hover:scale-110 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200"
-                    aria-label={social.name}
-                  >
-                    <Icon className="w-5 h-5 text-blue-500 dark:text-blue-400" />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Brand */}
+        <div className="lg:col-span-2">
+          <p className="font-heading text-xl font-black uppercase tracking-[0.2em] text-foreground mb-4">
+            Tahmidur<span className="text-accent text-glow">_</span>
+          </p>
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-md">
+            Building exceptional digital experiences with modern technologies — full-stack
+            engineering with a focus on secure software design.
+          </p>
+          <p className="mt-6 font-mono text-xs text-muted-foreground">
+            <span className="text-accent">guest@portfolio</span>
+            <span className="text-foreground">:</span>
+            <span className="text-accent-tertiary">~</span>$ <span className="cyber-cursor">uptime --since {year}</span>
+          </p>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-blue-400/20 text-center text-foreground/60">
-          <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
+        {/* Navigation */}
+        <nav aria-label="Footer">
+          <h2 className={headingClasses}>{"// "}Navigate</h2>
+          <ul className="space-y-1">
+            {footerLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="group inline-flex items-center gap-2 min-h-9 font-label text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-accent transition-colors duration-150"
+                >
+                  <span aria-hidden className="text-border group-hover:text-accent">&gt;</span>
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Social */}
+        <div>
+          <h2 className={headingClasses}>{"// "}Uplink</h2>
+          <div className="flex flex-wrap gap-2">
+            {socialLinks.map((social: SocialRow) => {
+              const Icon = getSocialIcon(social.icon);
+              return (
+                <a
+                  key={social.id}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className="focus-visible:outline-2 focus-visible:outline-accent-tertiary"
+                >
+                  <IconBox interactive>
+                    <Icon />
+                  </IconBox>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 font-label text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p>&copy; {year} Tahmidur Rahman // All rights reserved</p>
+          <p className="flex items-center gap-2">
+            <span className="size-1.5 bg-accent shadow-neon-sm" />
+            Signal stable
+          </p>
         </div>
       </div>
     </footer>

@@ -20,44 +20,42 @@ export default function AdminTable<T extends { id: string | number }>({
   data, columns, onEdit, onDelete,
 }: AdminTableProps<T>) {
   if (data.length === 0) {
-    return <p className="text-center py-12 text-foreground/40 text-sm">No entries yet.</p>;
+    return (
+      <p className="text-center py-12 font-mono text-sm text-muted-foreground">
+        <span className="text-accent-tertiary">$</span> SELECT * … <span className="text-warning">0 rows</span>
+      </p>
+    );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border">
-      <table className="w-full text-sm">
-        <thead className="bg-foreground/5 border-b border-border">
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm font-mono">
+        <thead className="border-b border-border bg-muted/40">
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="text-left px-4 py-3 font-medium text-foreground/70">
+              <th key={col.key} scope="col" className="text-left px-4 py-3 font-label font-normal text-xs uppercase tracking-[0.2em] text-accent-tertiary">
                 {col.label}
               </th>
             ))}
-            <th className="text-right px-4 py-3 font-medium text-foreground/70">Actions</th>
+            <th scope="col" className="text-right px-4 py-3 font-label font-normal text-xs uppercase tracking-[0.2em] text-accent-tertiary">
+              Actions
+            </th>
           </tr>
         </thead>
-        <tbody>
-          {data.map((item, i) => (
-            <tr
-              key={item.id}
-              className={i % 2 === 0 ? "bg-background" : "bg-foreground/[0.02]"}
-            >
+        <tbody className="divide-y divide-border/60">
+          {data.map((item) => (
+            <tr key={item.id} className="transition-colors duration-100 hover:bg-accent/5">
               {columns.map((col) => (
-                <td key={col.key} className="px-4 py-3 text-foreground/80">
+                <td key={col.key} className="px-4 py-3 text-foreground/85">
                   {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "")}
                 </td>
               ))}
               <td className="px-4 py-3 text-right">
                 <div className="flex gap-2 justify-end">
                   <Button size="sm" variant="outline" onClick={() => onEdit(item)}>
-                    <FaEdit className="mr-1" /> Edit
+                    <FaEdit /> Edit
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-500 hover:bg-red-500/10 border-red-500/30"
-                    onClick={() => onDelete(item)}
-                  >
+                  <Button size="sm" variant="destructive" onClick={() => onDelete(item)} aria-label="Delete">
                     <FaTrash />
                   </Button>
                 </div>

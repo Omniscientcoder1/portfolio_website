@@ -3,295 +3,438 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ════════════════════════════════════════════════════════════════
+   CYBERPUNK / GLITCH DESIGN SYSTEM
+   "High-Tech, Low-Life." — single source of truth for tokens.
+   Components consume these via Tailwind (bg-card, text-accent,
+   shadow-neon, font-heading …) — never hardcode hex in components.
+   ════════════════════════════════════════════════════════════════ */
+
 @theme inline {
+  /* Color tokens → Tailwind utilities */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--background);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-tertiary: var(--accent-tertiary);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+
+  /* shadcn aliases kept so existing `primary`/`secondary` utilities resolve */
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--background);
+  --color-secondary: var(--muted);
+  --color-secondary-foreground: var(--foreground);
+
+  /* Typography */
+  --font-heading: var(--font-orbitron), "Share Tech Mono", monospace;
+  --font-sans: var(--font-jetbrains), "Fira Code", Consolas, monospace;
+  --font-mono: var(--font-jetbrains), "Fira Code", Consolas, monospace;
+  --font-label: var(--font-share-tech), monospace;
+
+  /* Radius — sharp is the default; chamfers come from clip-path */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+
+  /* Neon glow shadows → shadow-neon, shadow-neon-lg … */
+  --shadow-neon: var(--box-shadow-neon);
+  --shadow-neon-sm: var(--box-shadow-neon-sm);
+  --shadow-neon-lg: var(--box-shadow-neon-lg);
+  --shadow-neon-secondary: var(--box-shadow-neon-secondary);
+  --shadow-neon-tertiary: var(--box-shadow-neon-tertiary);
+  --shadow-neon-destructive: var(--box-shadow-neon-destructive);
+
+  /* Motion */
+  --ease-digital: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --animate-blink: blink 1s step-end infinite;
+  --animate-glitch: glitch 0.3s steps(2) infinite;
+  --animate-rgb-shift: rgbShift 3s steps(2) infinite;
+  --animate-flicker: flicker 6s linear infinite;
+  --animate-hue: hueRotate 6s linear infinite;
 }
 
 :root {
-  --radius: 0.625rem;
+  /* ── Palette (dark only — the void) ───────────────────────── */
+  --background: #0a0a0f;
+  --foreground: #e0e0e0;
+  --card: #12121a;
+  --muted: #1c1c2e;
+  --muted-foreground: #8b93a1; /* nudged from #6b7280 to clear WCAG AA on #0a0a0f */
+  --accent: #00ff88;
+  --accent-secondary: #ff00ff;
+  --accent-tertiary: #00d4ff;
+  --border: #2a2a3a;
+  --input: #12121a;
+  --ring: #00ff88;
+  --destructive: #ff3366;
+  --warning: #ffcc00;
 
-  /* Blue Palette */
-  --apple-blue: 217 91% 47%;
-  --apple-blue-dark: 215 80% 50%;
-  --blue-vibrant: 213 94% 55%;
-  --blue-light: 200 100% 70%;
-  --purple-accent: 262 83% 58%;
+  /* ── Neon glow stacks ─────────────────────────────────────── */
+  --box-shadow-neon: 0 0 5px #00ff88, 0 0 10px #00ff8840;
+  --box-shadow-neon-sm: 0 0 3px #00ff88, 0 0 6px #00ff8830;
+  --box-shadow-neon-lg: 0 0 10px #00ff88, 0 0 20px #00ff8860, 0 0 40px #00ff8830;
+  --box-shadow-neon-secondary: 0 0 5px #ff00ff, 0 0 20px #ff00ff60;
+  --box-shadow-neon-tertiary: 0 0 5px #00d4ff, 0 0 20px #00d4ff60;
+  --box-shadow-neon-destructive: 0 0 5px #ff3366, 0 0 20px #ff336660;
 
-  /* ── Light mode — crisp, high-contrast, vibrant ──────────────────
-     Background: near-white with a cool-blue undertone
-     Text:       deep navy-black  (~18:1 contrast on bg)
-     Cards:      pure white — pop off the background
-     Primary:    rich electric blue, not a pastel
-     Muted text: slate-blue, still passes WCAG AA
-     Borders:    clearly visible, not ghost-grey
-  ───────────────────────────────────────────────────────────────── */
-  --background: 220 26% 96%;
-  --foreground: 222 47% 10%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 10%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 10%;
-  --primary: 217 91% 47%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 215 32% 90%;
-  --secondary-foreground: 222 40% 18%;
-  --muted: 216 22% 89%;
-  --muted-foreground: 218 22% 36%;
-  --accent: 213 94% 55%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 48%;
-  --border: 214 25% 79%;
-  --input: 214 25% 79%;
-  --ring: 217 91% 47%;
+  /* ── Chamfer sizes ────────────────────────────────────────── */
+  --chamfer: 12px;
+  --chamfer-sm: 6px;
 
-  /* Glass — opaque white with blue tint so surfaces stand out */
-  --glass-bg: rgba(255, 255, 255, 0.62);
-  --glass-border: rgba(88, 138, 240, 0.32);
-  --glass-shadow: rgba(38, 90, 210, 0.13);
-
-  --chart-1: 215 90% 42%;
-  --chart-2: 153 70% 36%;
-  --chart-3: 38 95% 52%;
-  --chart-4: 270 75% 55%;
-  --chart-5: 347 82% 52%;
-  --sidebar: 0 0% 100%;
-  --sidebar-foreground: 222 47% 10%;
-  --sidebar-primary: 217 91% 47%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 215 30% 94%;
-  --sidebar-accent-foreground: 222 47% 10%;
-  --sidebar-border: 214 25% 84%;
-  --sidebar-ring: 217 91% 47%;
+  color-scheme: dark;
 }
 
-.dark {
-  --background: 220 35% 8%;
-  --foreground: 210 30% 98%;
-  --card: 220 40% 10%;
-  --card-foreground: 210 30% 98%;
-  --popover: 220 40% 10%;
-  --popover-foreground: 210 30% 98%;
-  --primary: var(--blue-vibrant);
-  --primary-foreground: 220 20% 10%;
-  --secondary: 220 30% 14%;
-  --secondary-foreground: 210 30% 98%;
-  --muted: 220 25% 16%;
-  --muted-foreground: 210 20% 65%;
-  --accent: var(--blue-light);
-  --accent-foreground: 220 20% 10%;
-  --destructive: 0 62% 50%;
-  --border: 220 30% 22%;
-  --input: 220 30% 22%;
-  --ring: var(--blue-vibrant);
-  
-  /* Enhanced Glassmorphism with Blue Tint - Dark Mode */
-  --glass-bg: rgba(30, 60, 120, 0.25);
-  --glass-border: rgba(100, 150, 255, 0.2);
-  --glass-shadow: rgba(0, 50, 150, 0.4);
-  
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
-  --sidebar: 0 0% 12%;
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: var(--apple-blue-dark);
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 0 0% 15%;
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 0 0% 20%;
-  --sidebar-ring: var(--apple-blue-dark);
-}
-
+/* ════════════════════ BASE ════════════════════ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply text-foreground;
-    /* Light: crisp near-white → perceptible cool blue — no more mid-pastel mush */
-    background: linear-gradient(
-      145deg,
-      hsl(220, 30%, 98%) 0%,
-      hsl(213, 45%, 93%) 45%,
-      hsl(220, 28%, 96%) 100%
-    );
-    background-attachment: fixed;
-    min-height: 100vh;
-  }
-  .dark body {
-    background: linear-gradient(135deg,
-      hsl(220, 40%, 8%) 0%,
-      hsl(215, 45%, 12%) 50%,
-      hsl(210, 35%, 15%) 100%);
-    background-attachment: fixed;
-  }
-}
 
-@layer utilities {
-  /* ── Glass utilities ────────────────────────────────────────────
-     Light: white-frosted surfaces so cards/panels are clearly visible.
-     Dark:  deep navy-blue frosted surfaces (unchanged).
-  ─────────────────────────────────────────────────────────────── */
-
-  .glass {
-    background: rgba(255, 255, 255, 0.60);
-    backdrop-filter: blur(12px) saturate(160%);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    border: 1px solid rgba(88, 138, 240, 0.28);
-    box-shadow: 0 8px 28px 0 rgba(38, 90, 210, 0.11);
-  }
-
-  .dark .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 var(--glass-shadow);
-  }
-
-  .glass-strong {
-    background: rgba(255, 255, 255, 0.80);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(80, 130, 240, 0.38);
-    box-shadow: 0 8px 32px 0 rgba(38, 90, 210, 0.16);
-  }
-
-  .dark .glass-strong {
-    background: rgba(30, 60, 120, 0.35);
-    border: 1px solid rgba(100, 150, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(0, 50, 150, 0.5);
-  }
-
-  /* Solid glass-like navbar surface (non-translucent) */
-  .glass-solid-nav {
-    background: linear-gradient(
-      135deg,
-      hsl(0 0% 100%) 0%,
-      hsl(213 55% 97%) 50%,
-      hsl(208 50% 96%) 100%
-    );
-    border: 1px solid rgba(80, 130, 240, 0.38);
-    box-shadow:
-      0 4px 24px rgba(38, 90, 210, 0.14),
-      0 1px 0 rgba(80, 130, 240, 0.18) inset;
-  }
-
-  .dark .glass-solid-nav {
-    background: linear-gradient(
-      135deg,
-      hsl(221 48% 17%) 0%,
-      hsl(216 52% 21%) 55%,
-      hsl(207 55% 24%) 100%
-    );
-    border: 1px solid rgba(110, 160, 255, 0.35);
-    box-shadow: 0 10px 34px rgba(12, 40, 110, 0.55);
-  }
-
-  /* Blue-tinted card effect */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(16px) saturate(170%);
-    -webkit-backdrop-filter: blur(16px) saturate(170%);
-    border: 1px solid rgba(88, 138, 240, 0.30);
-    box-shadow:
-      0 12px 40px 0 rgba(38, 90, 210, 0.13),
-      0 1px 0 rgba(255, 255, 255, 0.9) inset;
-  }
-
-  .dark .glass-card {
-    background: rgba(30, 60, 120, 0.4);
-    border: 1px solid rgba(100, 150, 255, 0.3);
-    box-shadow: 0 12px 40px 0 rgba(0, 50, 150, 0.6);
-  }
-
-  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
   }
 
-  /* Gradient animation */
-  @keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  body {
+    @apply bg-background text-foreground font-sans tracking-wide;
+    min-height: 100vh;
+    /* Gradient mesh: low-opacity neon bleeding in from the corners */
+    background-image:
+      radial-gradient(ellipse 60% 40% at 0% 0%, rgba(0, 255, 136, 0.06), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 100% 0%, rgba(255, 0, 255, 0.05), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(0, 212, 255, 0.05), transparent 70%);
+    background-attachment: fixed;
   }
 
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
+  h1, h2, h3 {
+    @apply font-heading uppercase;
+  }
+  h1 { @apply font-black tracking-widest; }
+  h2 { @apply font-bold tracking-wide; }
+  h3 { @apply font-semibold tracking-wide; }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--background);
   }
 
-  /* 3D / perspective utilities */
-  .preserve-3d {
-    transform-style: preserve-3d;
+  /* Neon scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--background); }
+  ::-webkit-scrollbar-thumb { background: var(--muted); border: 1px solid var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  select {
+    @apply bg-input border border-border text-accent font-mono text-sm px-3 py-2;
   }
 
-  .perspective-800 {
-    perspective: 800px;
+  input[type="checkbox"] {
+    accent-color: var(--accent);
   }
+}
 
-  .perspective-1200 {
-    perspective: 1200px;
-  }
+/* ════════════════════ UTILITIES ════════════════════ */
 
-  /* Shimmer loading effect */
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
+/* ── Chamfered corners (45° cuts).
+      Each sets --cut so `cyber-frame` can trace the same outline. ── */
+@utility cyber-chamfer {
+  --cut: var(--chamfer);
+  clip-path: polygon(
+    0 var(--cut), var(--cut) 0,
+    calc(100% - var(--cut)) 0, 100% var(--cut),
+    100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+    var(--cut) 100%, 0 calc(100% - var(--cut))
+  );
+}
+@utility cyber-chamfer-sm {
+  --cut: var(--chamfer-sm);
+  clip-path: polygon(
+    0 var(--cut), var(--cut) 0,
+    calc(100% - var(--cut)) 0, 100% var(--cut),
+    100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+    var(--cut) 100%, 0 calc(100% - var(--cut))
+  );
+}
 
-  /* Floating animation for decorative elements */
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
+/* ── Chamfer-aware border. A plain `border` leaves the 45° cuts unstroked,
+      so this draws the outline as an even-odd ring polygon on ::after.
+      Pair with cyber-chamfer(-sm) on a positioned element.
+      Tune with --frame-color and --frame-w (k = w·tan(22.5°) ≈ 0.414w). ── */
+@utility cyber-frame {
+  &::after {
+    --w: var(--frame-w, 1px);
+    --k: calc(var(--w) * 0.414);
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--frame-color, var(--border));
+    transition: background-color 150ms var(--ease-digital);
+    clip-path: polygon(
+      evenodd,
+      0 var(--cut), var(--cut) 0,
+      calc(100% - var(--cut)) 0, 100% var(--cut),
+      100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+      var(--cut) 100%, 0 calc(100% - var(--cut)),
+      0 var(--cut),
+      var(--w) calc(var(--cut) + var(--k)),
+      calc(var(--cut) + var(--k)) var(--w),
+      calc(100% - var(--cut) - var(--k)) var(--w),
+      calc(100% - var(--w)) calc(var(--cut) + var(--k)),
+      calc(100% - var(--w)) calc(100% - var(--cut) - var(--k)),
+      calc(100% - var(--cut) - var(--k)) calc(100% - var(--w)),
+      calc(var(--cut) + var(--k)) calc(100% - var(--w)),
+      var(--w) calc(100% - var(--cut) - var(--k)),
+      var(--w) calc(var(--cut) + var(--k))
+    );
   }
+}
 
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+/* ── Outer neon glow that follows a clipped child's chamfered silhouette.
+      (box-shadow on the clipped element itself would be cut off.) ── */
+@utility cyber-glow-wrap {
+  transition: filter 200ms var(--ease-digital);
+  &:hover,
+  &:focus-within {
+    filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.55)) drop-shadow(0 0 14px rgba(0, 255, 136, 0.2));
   }
+}
+/* Asymmetric cut: top-left + bottom-right only — for HUD tabs and badges */
+@utility cyber-chamfer-tab {
+  clip-path: polygon(
+    var(--chamfer-sm) 0, 100% 0,
+    100% calc(100% - var(--chamfer-sm)), calc(100% - var(--chamfer-sm)) 100%,
+    0 100%, 0 var(--chamfer-sm)
+  );
+}
 
-  .animate-float-slow {
-    animation: float 9s ease-in-out infinite;
+/* ── Chromatic aberration + occasional glitch.
+      Usage: <span class="cyber-glitch" data-text="SAME TEXT">SAME TEXT</span> ── */
+@utility cyber-glitch {
+  position: relative;
+  display: inline-block;
+  text-shadow: -1px 0 var(--accent-secondary), 1px 0 var(--accent-tertiary);
+  animation: glitchSkew 5s steps(1) infinite;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: transparent;
   }
+  &::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--accent-secondary);
+    clip-path: inset(0 0 100% 0);
+    animation: glitchClipTop 4s steps(1) infinite;
+  }
+  &::after {
+    left: -2px;
+    text-shadow: 2px 0 var(--accent-tertiary);
+    clip-path: inset(100% 0 0 0);
+    animation: glitchClipBottom 4.6s steps(1) infinite;
+  }
+}
+
+/* Static RGB split — for smaller headings that shouldn't animate */
+@utility text-chromatic {
+  text-shadow: -1px 0 rgba(255, 0, 255, 0.7), 1px 0 rgba(0, 212, 255, 0.7);
+}
+
+/* ── Neon text glow ── */
+@utility text-glow {
+  text-shadow: 0 0 6px currentColor, 0 0 18px color-mix(in srgb, currentColor 40%, transparent);
+}
+@utility drop-glow {
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+}
+
+/* ── Gradient text (green → cyan → magenta) ── */
+@utility text-neon-gradient {
+  background: linear-gradient(90deg, var(--accent), var(--accent-tertiary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3));
+}
+
+/* ── Circuit / grid background ── */
+@utility cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* PCB-trace pattern (SVG, inline so it ships with the CSS) */
+@utility cyber-circuit {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='none' stroke='%2300ff88' stroke-opacity='0.08' stroke-width='1'%3E%3Cpath d='M0 20h30l10 10h40M60 0v20l10 10v30M120 70H90l-10 10H50l-10 10v30M20 120v-20l10-10V60h20'/%3E%3Ccircle cx='80' cy='30' r='2.5'/%3E%3Ccircle cx='70' cy='60' r='2.5'/%3E%3Ccircle cx='50' cy='60' r='2.5'/%3E%3Ccircle cx='40' cy='90' r='2.5'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+
+/* ── Scanlines (apply to a positioned element; draws via ::after) ── */
+@utility cyber-scanlines {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.3) 2px,
+      rgba(0, 0, 0, 0.3) 4px
+    );
+  }
+}
+
+/* ── Animated hue-rotating neon border (wrap an element: p-px + this) ── */
+@utility cyber-gradient-border {
+  background: linear-gradient(135deg, var(--accent), var(--accent-tertiary), var(--accent-secondary), var(--accent));
+  animation: hueRotate 6s linear infinite;
+}
+
+/* ── Blinking terminal cursor ── */
+@utility cyber-cursor {
+  &::after {
+    content: "_";
+    margin-left: 0.15em;
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+  }
+}
+
+/* ── Icon glow on hover ── */
+@utility icon-glow {
+  transition: filter 150ms var(--ease-digital);
+  &:hover { filter: drop-shadow(0 0 4px currentColor); }
+}
+
+/* ════════════════════ KEYFRAMES ════════════════════ */
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 1px); }
+}
+
+/* Idle for ~92% of the cycle, then a brief skew/translate snap */
+@keyframes glitchSkew {
+  0%, 91%, 100% { transform: none; }
+  92% { transform: skewX(-8deg) translateX(-3px); }
+  93% { transform: skewX(6deg) translateX(3px); }
+  94% { transform: skewX(0) translateX(-1px); }
+  95% { transform: none; }
+}
+
+@keyframes glitchClipTop {
+  0%, 89%, 100% { clip-path: inset(0 0 100% 0); }
+  90% { clip-path: inset(10% 0 60% 0); transform: translateX(-4px); }
+  92% { clip-path: inset(40% 0 35% 0); transform: translateX(4px); }
+  94% { clip-path: inset(70% 0 5% 0); transform: translateX(-2px); }
+}
+
+@keyframes glitchClipBottom {
+  0%, 87%, 100% { clip-path: inset(100% 0 0 0); }
+  88% { clip-path: inset(60% 0 10% 0); transform: translateX(4px); }
+  90% { clip-path: inset(20% 0 55% 0); transform: translateX(-4px); }
+  93% { clip-path: inset(5% 0 80% 0); transform: translateX(2px); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes rgbShift {
+  0%, 100% { text-shadow: -2px 0 #ff00ff, 2px 0 #00d4ff; }
+  50% { text-shadow: 2px 0 #ff00ff, -2px 0 #00d4ff; }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 55% { opacity: 0.4; }
+}
+
+@keyframes hueRotate {
+  to { filter: hue-rotate(360deg); }
+}
+
+/* ════════════════════ GLOBAL OVERLAYS ════════════════════ */
+
+/* Full-page CRT scanlines + rolling refresh bar. Rendered once in RootLayout. */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.18) 2px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+}
+.crt-overlay::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 136, 0.035), transparent);
+  animation: scanline 8s linear infinite;
+}
+/* Film-grain noise */
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ════════════════════ ACCESSIBILITY ════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Keep the static chromatic aberration, drop the motion */
+  .cyber-glitch::before,
+  .cyber-glitch::after,
+  .crt-overlay::before {
+    display: none;
+  }
+}
+
+/* Lighter effects on small screens for GPU headroom */
+@media (max-width: 640px) {
+  .crt-overlay::after { display: none; }
 }

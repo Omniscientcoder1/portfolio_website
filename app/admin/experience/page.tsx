@@ -93,66 +93,66 @@ export default function ExperienceAdminPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Experience</h1>
-          <p className="text-foreground/60 mt-1">{items.length} entries</p>
+          <h1 className="text-2xl md:text-3xl text-foreground">Experience</h1>
+          <p className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground mt-2">{items.length} entries</p>
         </div>
-        <Button onClick={openNew}><FaPlus className="mr-2" /> Add Experience</Button>
+        <Button variant="glitch" onClick={openNew}><FaPlus className="mr-2" /> Add Experience</Button>
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20 text-foreground/40"><FaSpinner className="animate-spin text-2xl" /></div>
+        <div className="flex justify-center py-20 text-accent"><FaSpinner className="animate-spin text-2xl" /></div>
       ) : (
-        <Card className="glass">
-          <CardContent className="p-0 pt-4">
+        <Card className="py-0 gap-0">
+          <CardContent className="p-0">
             <AdminTable data={items} columns={columns} onEdit={openEdit} onDelete={handleDelete} />
           </CardContent>
         </Card>
       )}
 
       {editing && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setEditing(null)}>
-          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-strong">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-background/80 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && setEditing(null)}>
+          <Card variant="terminal" terminalTitle="edit_record.sh" className="w-full max-w-2xl my-auto">
             <CardHeader><CardTitle>{editing.id ? "Edit Experience" : "New Experience"}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Company *</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Company *</label>
                   <Input value={form.company} onChange={(e) => setForm((p) => ({ ...p, company: e.target.value }))} />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Role *</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Role *</label>
                   <Input value={form.role} onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))} />
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Duration (display text)</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Duration (display text)</label>
                 <Input value={form.duration} onChange={(e) => setForm((p) => ({ ...p, duration: e.target.value }))} placeholder="Jan 2024 – Present" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Start Date</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Start Date</label>
                   <Input value={form.startDate} onChange={(e) => setForm((p) => ({ ...p, startDate: e.target.value }))} placeholder="2024-01" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">End Date</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">End Date</label>
                   <Input value={form.endDate} onChange={(e) => setForm((p) => ({ ...p, endDate: e.target.value }))} placeholder="Present" />
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Responsibilities (one per line)</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Responsibilities (one per line)</label>
                 <Textarea rows={5} value={respInput} onChange={(e) => setRespInput(e.target.value)} placeholder="Did X...\nDid Y..." />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground/70">Achievements (one per line)</label>
+                <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Achievements (one per line)</label>
                 <Textarea rows={4} value={achievInput} onChange={(e) => setAchievInput(e.target.value)} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Logo path</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Logo path</label>
                   <Input value={form.logo ?? ""} onChange={(e) => setForm((p) => ({ ...p, logo: e.target.value }))} placeholder="/images/companies/logo.png" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-foreground/70">Order</label>
+                  <label className="font-label text-xs uppercase tracking-[0.2em] text-muted-foreground">Order</label>
                   <Input type="number" value={form.order} onChange={(e) => setForm((p) => ({ ...p, order: parseInt(e.target.value) || 0 }))} />
                 </div>
               </div>

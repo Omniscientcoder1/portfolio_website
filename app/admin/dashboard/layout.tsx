@@ -8,7 +8,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   if (!admin) redirect("/admin");
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background cyber-grid">
       <AdminSidebar />
       <main className="flex-1 p-8 overflow-auto">{children}</main>
     </div>

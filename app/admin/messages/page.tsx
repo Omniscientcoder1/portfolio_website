@@ -21,15 +21,12 @@ export default function MessagesPage() {
   const [selected, setSelected] = useState<Message | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadMessages = () => {
-    setLoading(true);
+  useEffect(() => {
     fetch("/api/admin/messages")
       .then((r) => r.json())
       .then((data) => { setMessages(data); setLoading(false); })
       .catch(() => setLoading(false));
-  };
-
-  useEffect(() => { loadMessages(); }, []);
+  }, []);
 
   const markRead = async (id: number, read: boolean) => {
     await fetch(`/api/admin/messages/${id}`, {
